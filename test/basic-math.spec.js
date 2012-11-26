@@ -78,4 +78,30 @@ describe('basic arithmatic operations', function () {
             expect(result[0]).toEqual(5040);
         });
     });
+
+    describe('division', function () {
+        it('should divide two numbers', function () {
+            var engine = new mathy.Engine({ name: 'a', derivation: '2 / 2' });
+
+            var result = engine.process();
+
+            expect(result[0]).toEqual(1);
+        });
+
+        it('should divide three numbers', function () {
+            var engine = new mathy.Engine({ name: 'a', derivation: '2 / 10 / 5' });
+
+            var result = engine.process();
+
+            expect(result[0]).toEqual(0.04);
+        });
+
+        it('should divide heaps numbers', function () {
+            var engine = new mathy.Engine({ name: 'a', derivation: '2 / 1 / 5 / 3 / 7 / 8 / 3' });
+
+            var result = engine.process();
+
+            expect(result[0]).toEqual(0.0007936507936507935);
+        });
+    });
 });

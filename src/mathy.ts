@@ -42,6 +42,24 @@ export module mathy {
             return calc;
         }
 
+        index = rule.lastIndexOf('/');
+
+        if (~index) {
+            calc = new Calculation(calculationType.division);
+
+            part1 = rule.slice(0, index);
+            if (part1) {
+                calc.children.push(buildCalculation(part1));
+            }
+
+            part2 = rule.slice(index + 1);
+            if (part2) {
+                calc.children.push(buildCalculation(part2));
+            }
+
+            return calc;
+        }
+
         index = rule.lastIndexOf('+');
 
         if (~index) {
@@ -100,6 +118,9 @@ export module mathy {
             case calculationType.multiply:
                 return node.value = node.children[0].value * node.children[1].value;
 
+            case calculationType.division:
+                return node.value = node.children[0].value / node.children[1].value;
+
             case calculationType.value:
                 return node.value;
         }
@@ -121,6 +142,7 @@ export module mathy {
         add,
         subtraction,
         multiply,
+        division,
         value
     }
 }

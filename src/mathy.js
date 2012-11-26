@@ -41,6 +41,19 @@
             }
             return calc;
         }
+        index = rule.lastIndexOf('/');
+        if(~index) {
+            calc = new Calculation(calculationType.division);
+            part1 = rule.slice(0, index);
+            if(part1) {
+                calc.children.push(buildCalculation(part1));
+            }
+            part2 = rule.slice(index + 1);
+            if(part2) {
+                calc.children.push(buildCalculation(part2));
+            }
+            return calc;
+        }
         index = rule.lastIndexOf('+');
         if(~index) {
             calc = new Calculation(calculationType.add);
@@ -89,6 +102,10 @@
                 return node.value = node.children[0].value * node.children[1].value;
 
             }
+            case calculationType.division: {
+                return node.value = node.children[0].value / node.children[1].value;
+
+            }
             case calculationType.value: {
                 return node.value;
 
@@ -115,8 +132,10 @@
         calculationType.subtraction = 1;
         calculationType._map[2] = "multiply";
         calculationType.multiply = 2;
-        calculationType._map[3] = "value";
-        calculationType.value = 3;
+        calculationType._map[3] = "division";
+        calculationType.division = 3;
+        calculationType._map[4] = "value";
+        calculationType.value = 4;
     })(calculationType || (calculationType = {}));
 })(exports.mathy || (exports.mathy = {}));
 var mathy = exports.mathy;
