@@ -28,6 +28,19 @@
         var part1;
         var part2;
         var calc;
+        index = rule.lastIndexOf('*');
+        if(~index) {
+            calc = new Calculation(calculationType.multiply);
+            part1 = rule.slice(0, index);
+            if(part1) {
+                calc.children.push(buildCalculation(part1));
+            }
+            part2 = rule.slice(index + 1);
+            if(part2) {
+                calc.children.push(buildCalculation(part2));
+            }
+            return calc;
+        }
         index = rule.lastIndexOf('+');
         if(~index) {
             calc = new Calculation(calculationType.add);
@@ -72,6 +85,10 @@
                 return node.value = node.children[0].value - node.children[1].value;
 
             }
+            case calculationType.multiply: {
+                return node.value = node.children[0].value * node.children[1].value;
+
+            }
             case calculationType.value: {
                 return node.value;
 
@@ -96,8 +113,10 @@
         calculationType.add = 0;
         calculationType._map[1] = "subtraction";
         calculationType.subtraction = 1;
-        calculationType._map[2] = "value";
-        calculationType.value = 2;
+        calculationType._map[2] = "multiply";
+        calculationType.multiply = 2;
+        calculationType._map[3] = "value";
+        calculationType.value = 3;
     })(calculationType || (calculationType = {}));
 })(exports.mathy || (exports.mathy = {}));
 var mathy = exports.mathy;

@@ -24,6 +24,24 @@ export module mathy {
         var part2: string;
         var calc: Calculation;
 
+        index = rule.lastIndexOf('*');
+
+        if (~index) {
+            calc = new Calculation(calculationType.multiply);
+
+            part1 = rule.slice(0, index);
+            if (part1) {
+                calc.children.push(buildCalculation(part1));
+            }
+
+            part2 = rule.slice(index + 1);
+            if (part2) {
+                calc.children.push(buildCalculation(part2));
+            }
+
+            return calc;
+        }
+
         index = rule.lastIndexOf('+');
 
         if (~index) {
@@ -79,6 +97,9 @@ export module mathy {
             case calculationType.subtraction:
                 return node.value = node.children[0].value - node.children[1].value;
 
+            case calculationType.multiply:
+                return node.value = node.children[0].value * node.children[1].value;
+
             case calculationType.value:
                 return node.value;
         }
@@ -99,6 +120,7 @@ export module mathy {
     enum calculationType {
         add,
         subtraction,
+        multiply,
         value
     }
 }

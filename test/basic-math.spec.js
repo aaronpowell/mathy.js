@@ -1,5 +1,5 @@
 describe('basic arithmatic operations', function () {
-    var mathy = require('../src/index.js');
+    var mathy = require('../index.js');
 
     describe('addition', function () {
         it('should add two numbers', function () {
@@ -50,6 +50,32 @@ describe('basic arithmatic operations', function () {
             var result = engine.process();
 
             expect(result[0]).toEqual(-28);
+        });
+    });
+
+    describe('multiplication', function () {
+        it('should multiply two numbers', function () {
+            var engine = new mathy.Engine({ name: 'a', derivation: '2 * 1' });
+
+            var result = engine.process();
+
+            expect(result[0]).toEqual(2);
+        });
+
+        it('should multiply three numbers', function () {
+            var engine = new mathy.Engine({ name: 'a', derivation: '2 * 1 * 5' });
+
+            var result = engine.process();
+
+            expect(result[0]).toEqual(10);
+        });
+
+        it('should multiply heaps numbers', function () {
+            var engine = new mathy.Engine({ name: 'a', derivation: '2 * 1 * 5 * 3 * 7 * 8 * 3' });
+
+            var result = engine.process();
+
+            expect(result[0]).toEqual(5040);
         });
     });
 });
