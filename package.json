@@ -1,0 +1,23 @@
+{
+  "name": "mathy.js",
+  "version": "0.0.1",
+  "description": "A simple formula evaluator and rules parser",
+  "main": "./index.js",
+  "directories": {
+    "test": "test"
+  },
+  "devDependencies": {
+    "typescript": "~0.8.1",
+    "jasmine-node": "~1.0.26"
+  },
+  "scripts": {
+    "test": "node ./node_modules/typescript/bin/tsc --target ES5 src/mathy.ts && node ./node_modules/jasmine-node/bin/jasmine-node ./test"
+  },
+  "repository": "",
+  "keywords": [
+    "math",
+    "parser"
+  ],
+  "author": "Aaron Powell <me@aaron-powell.com> (https://github.com/aaronpowell)",
+  "license": "MIT"
+}
