@@ -104,4 +104,22 @@ describe('basic arithmatic operations', function () {
             expect(result[0]).toEqual(0.0007936507936507935);
         });
     });
+
+    describe('parenthesis', function () {
+        it('should add numbers in parenthesis', function () {
+            var engine = new mathy.Engine({ name: 'a', derivation: '(2+2)' });
+
+            var result = engine.process();
+
+            expect(result[0]).toEqual(4);
+        });
+
+        it('should add numbers in parenthesis', function () {
+            var engine = new mathy.Engine({ name: 'a', derivation: '(2+2+2)' });
+
+            var result = engine.process();
+
+            expect(result[0]).toEqual(6);
+        });
+    });
 });

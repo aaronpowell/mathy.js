@@ -24,39 +24,39 @@ export module mathy {
         var part2: string;
         var calc: Calculation;
 
-        index = rule.lastIndexOf('*');
+        index = rule.indexOf('(');
 
         if (~index) {
-            calc = new Calculation(calculationType.multiply);
+            var end: number;
+            var counter = 0;
+            var open = -1;
+            var close = -1;
+            var text = rule.slice(index);
+            for(;;) {
+                open = text.indexOf('(', ++open);
+                close = text.indexOf(')', ++close);
+                if (!~open && !~close) {
+                    end = -1;
+                    break;
+                }
 
-            part1 = rule.slice(0, index);
-            if (part1) {
-                calc.children.push(buildCalculation(part1));
+                if (~open) {
+                    counter++;
+                    close = 0;
+                } else if (~close) {
+                    counter--;
+                    open = 0;
+                }
+
+                if (!counter) {
+                    end = (open ? open : close);
+                    break;
+                }
             }
 
-            part2 = rule.slice(index + 1);
-            if (part2) {
-                calc.children.push(buildCalculation(part2));
-            }
-
-            return calc;
-        }
-
-        index = rule.lastIndexOf('/');
-
-        if (~index) {
-            calc = new Calculation(calculationType.division);
-
-            part1 = rule.slice(0, index);
-            if (part1) {
-                calc.children.push(buildCalculation(part1));
-            }
-
-            part2 = rule.slice(index + 1);
-            if (part2) {
-                calc.children.push(buildCalculation(part2));
-            }
-
+            text = rule.slice(index + 1, end);
+            calc = new Calculation(calculationType.group);
+            calc.children.push(buildCalculation(text));
             return calc;
         }
 
@@ -96,6 +96,42 @@ export module mathy {
             return calc;
         }
 
+        index = rule.lastIndexOf('*');
+
+        if (~index) {
+            calc = new Calculation(calculationType.multiply);
+
+            part1 = rule.slice(0, index);
+            if (part1) {
+                calc.children.push(buildCalculation(part1));
+            }
+
+            part2 = rule.slice(index + 1);
+            if (part2) {
+                calc.children.push(buildCalculation(part2));
+            }
+
+            return calc;
+        }
+
+        index = rule.lastIndexOf('/');
+
+        if (~index) {
+            calc = new Calculation(calculationType.division);
+
+            part1 = rule.slice(0, index);
+            if (part1) {
+                calc.children.push(buildCalculation(part1));
+            }
+
+            part2 = rule.slice(index + 1);
+            if (part2) {
+                calc.children.push(buildCalculation(part2));
+            }
+
+            return calc;
+        }
+
         return new Calculation(calculationType.value, parseInt(rule, 10));
     }
 
@@ -121,6 +157,9 @@ export module mathy {
             case calculationType.division:
                 return node.value = node.children[0].value / node.children[1].value;
 
+            case calculationType.group:
+                return node.value = calculate(node.children[0]);
+
             case calculationType.value:
                 return node.value;
         }
@@ -143,6 +182,7 @@ export module mathy {
         subtraction,
         multiply,
         division,
+        group,
         value
     }
 }
