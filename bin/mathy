@@ -2,15 +2,36 @@
 
 var Engine = require('../index.js').Engine;
 
-var engine = new Engine({
-    name: 'a',
-    derivation: process.argv.slice(2)
-        .reduce(function (x, y) {
-            return x + ' ' + y;
-        }, ''
-    )
-});
+if (process.argv.length == 2) {
+    var readline = require('readline');
 
-var result = engine.process();
+    var rl = readline.createInterface({
+        input: process.stdin,
+        output: process.stdout
+    });
 
-process.stdout.write(result[0] + '\n');
+    rl.question("Enter a formula: ", function(formula) {
+        var engine = new Engine({
+            name: 'a',
+            derivation: formula
+        });
+
+        var result = engine.process();
+
+        process.stdout.write(result[0] + '\n');
+        rl.close();
+    });
+} else {
+    var engine = new Engine({
+        name: 'a',
+        derivation: process.argv.slice(2)
+            .reduce(function (x, y) {
+                return x + ' ' + y;
+            }, ''
+        )
+    });
+
+    var result = engine.process();
+
+    process.stdout.write(result[0] + '\n');
+}
