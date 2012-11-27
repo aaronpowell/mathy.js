@@ -121,6 +121,14 @@ describe('basic arithmatic operations', function () {
 
             expect(result[0]).toEqual(6);
         });
+
+        it('should allow multiple parenthesis groups', function () {
+            var engine = new mathy.Engine({ name: 'a', derivation: '(2+2) + (2+2)' });
+
+            var result = engine.process();
+
+            expect(result[0]).toEqual(8);
+        });
     });
 
     describe('power of', function () {
@@ -139,5 +147,31 @@ describe('basic arithmatic operations', function () {
 
             expect(result[0]).toEqual(200);
         });
-    })
+    });
+
+    describe('negative numbers', function () {
+        it('should be able to add negative numbers', function () {
+            var engine = new mathy.Engine({ name: 'a', derivation: '2 + -1' });
+
+            var result = engine.process();
+
+            expect(result[0]).toEqual(1);
+        });
+
+        it('should be able to handle negative powers', function () {
+            var engine = new mathy.Engine({ name: 'a', derivation: '10 ^ (-1)' });
+
+            var result = engine.process();
+
+            expect(result[0]).toEqual(0.1);
+        });
+
+        it('should be able to handle negative powers with multiplication', function () {
+            var engine = new mathy.Engine({ name: 'a', derivation: '2 * 10 ^ (-2)' });
+
+            var result = engine.process();
+
+            expect(result[0]).toEqual(0.02);
+        });
+    });
 });
