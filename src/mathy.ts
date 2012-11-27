@@ -132,6 +132,24 @@ export module mathy {
             return calc;
         }
 
+        index = rule.lastIndexOf('^');
+
+        if (~index) {
+            calc = new Calculation(calculationType.power);
+
+            part1 = rule.slice(0, index);
+            if (part1) {
+                calc.children.push(buildCalculation(part1));
+            }
+
+            part2 = rule.slice(index + 1);
+            if (part2) {
+                calc.children.push(buildCalculation(part2));
+            }
+
+            return calc;
+        }
+
         return new Calculation(calculationType.value, parseInt(rule, 10));
     }
 
@@ -160,6 +178,9 @@ export module mathy {
             case calculationType.group:
                 return node.value = calculate(node.children[0]);
 
+            case calculationType.power:
+                return node.value = Math.pow(node.children[0].value, node.children[1].value);
+
             case calculationType.value:
                 return node.value;
         }
@@ -183,6 +204,7 @@ export module mathy {
         multiply,
         division,
         group,
+        power,
         value
     }
 }

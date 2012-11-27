@@ -122,4 +122,22 @@ describe('basic arithmatic operations', function () {
             expect(result[0]).toEqual(6);
         });
     });
+
+    describe('power of', function () {
+        it('should calculate power of', function () {
+            var engine = new mathy.Engine({ name: 'a', derivation: '10^2' });
+
+            var result = engine.process();
+
+            expect(result[0]).toEqual(100);
+        });
+
+        it('should calculate power of as a part of a fomula', function () {
+            var engine = new mathy.Engine({ name: 'a', derivation: '2 * 10^2' });
+
+            var result = engine.process();
+
+            expect(result[0]).toEqual(200);
+        });
+    })
 });

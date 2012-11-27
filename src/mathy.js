@@ -113,6 +113,19 @@
             }
             return calc;
         }
+        index = rule.lastIndexOf('^');
+        if(~index) {
+            calc = new Calculation(calculationType.power);
+            part1 = rule.slice(0, index);
+            if(part1) {
+                calc.children.push(buildCalculation(part1));
+            }
+            part2 = rule.slice(index + 1);
+            if(part2) {
+                calc.children.push(buildCalculation(part2));
+            }
+            return calc;
+        }
         return new Calculation(calculationType.value, parseInt(rule, 10));
     }
     function calculate(node) {
@@ -141,6 +154,10 @@
             }
             case calculationType.group: {
                 return node.value = calculate(node.children[0]);
+
+            }
+            case calculationType.power: {
+                return node.value = Math.pow(node.children[0].value, node.children[1].value);
 
             }
             case calculationType.value: {
@@ -173,8 +190,10 @@
         calculationType.division = 3;
         calculationType._map[4] = "group";
         calculationType.group = 4;
-        calculationType._map[5] = "value";
-        calculationType.value = 5;
+        calculationType._map[5] = "power";
+        calculationType.power = 5;
+        calculationType._map[6] = "value";
+        calculationType.value = 6;
     })(calculationType || (calculationType = {}));
 })(exports.mathy || (exports.mathy = {}));
 var mathy = exports.mathy;
