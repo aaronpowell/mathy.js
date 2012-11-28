@@ -7,12 +7,12 @@ RUNNER=$(BASE)node_modules\mocha\bin\mocha
 
 build:
 	@echo "Compiling mathy from TypeScript source"
-	node $(TSC) $(SRC) --sourcemap
+	node $(TSC) $(SRC) --sourcemap --target ES5
 	node $(TSC) --declaration $(SRC)
 
 build-w:
 	@echo "Compiling mathy from TypeScript source"
-	node $(TSC) $(SRC) --sourcemap -w
+	node $(TSC) $(SRC) --sourcemap -w --target ES5
 	node $(TSC) --declaration $(SRC)
 
 tests: build
@@ -26,3 +26,7 @@ tests-w: build
 tests-nyan: build
 	@echo "Running tests nyan style"
 	node $(RUNNER) .\test --reporter nyan
+
+tests-dbg: build
+	@echo "Running tests"
+	node --debug-brk $(RUNNER) .\test --reporter $(REPORTER)

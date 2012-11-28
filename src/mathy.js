@@ -12,10 +12,13 @@
         }
         Engine.prototype.process = function () {
             var rules = this.getRules();
+            var results = rules.length === 1 ? rules : rules.filter(function (r) {
+                return r.result;
+            }, []);
             var node;
             var outputs = [];
-            for(var i = 0; i < rules.length; i += 1) {
-                node = buildCalculation(rules[i].derivation.replace(/\s+/gi, ''));
+            for(var i = 0; i < results.length; i += 1) {
+                node = buildCalculation(results[i].derivation.replace(/\s+/gi, ''), rules);
                 outputs.push(calculate(node));
             }
             return outputs;
@@ -48,21 +51,21 @@
             }
         }
     }
-    function resolveParentesis(node, group, part) {
+    function resolveParentesis(node, group, part, rules) {
         if(node.type === calculationType.placeholder && node.value === group) {
             node.type = calculationType.group;
-            node.children.push(buildCalculation(part));
+            node.children.push(buildCalculation(part, rules));
             return true;
         } else {
             for(var i = 0; i < node.children.length; i += 1) {
-                if(resolveParentesis(node.children[i], group, part)) {
+                if(resolveParentesis(node.children[i], group, part, rules)) {
                     return true;
                 }
             }
         }
         return false;
     }
-    function buildCalculation(rule) {
+    function buildCalculation(rule, rules) {
         var index;
         var part1;
         var part2;
@@ -75,8 +78,8 @@
             var part3 = rule.slice(end + 1);
             calc = new Calculation(calculationType.group);
             var group = ++groupCount;
-            calc.children.push(buildCalculation(part1 + '$' + group + part3));
-            resolveParentesis(calc.children[0], group, part2);
+            calc.children.push(buildCalculation(part1 + '$' + group + part3, rules));
+            resolveParentesis(calc.children[0], group, part2, rules);
             return calc;
         }
         index = rule.lastIndexOf('+');
@@ -84,11 +87,11 @@
             calc = new Calculation(calculationType.add);
             part1 = rule.slice(0, index).trim();
             if(part1) {
-                calc.children.push(buildCalculation(part1));
+                calc.children.push(buildCalculation(part1, rules));
             }
             part2 = rule.slice(index + 1).trim();
             if(part2) {
-                calc.children.push(buildCalculation(part2));
+                calc.children.push(buildCalculation(part2, rules));
             }
             return calc;
         }
@@ -96,10 +99,10 @@
         if(~index) {
             calc = new Calculation(calculationType.subtraction);
             part1 = rule.slice(0, index).trim();
-            calc.children.push(buildCalculation(part1));
+            calc.children.push(buildCalculation(part1, rules));
             part2 = rule.slice(index + 1).trim();
             if(part2) {
-                calc.children.push(buildCalculation(part2));
+                calc.children.push(buildCalculation(part2, rules));
             }
             return calc;
         }
@@ -108,11 +111,11 @@
             calc = new Calculation(calculationType.multiply);
             part1 = rule.slice(0, index).trim();
             if(part1) {
-                calc.children.push(buildCalculation(part1));
+                calc.children.push(buildCalculation(part1, rules));
             }
             part2 = rule.slice(index + 1).trim();
             if(part2) {
-                calc.children.push(buildCalculation(part2));
+                calc.children.push(buildCalculation(part2, rules));
             }
             return calc;
         }
@@ -121,11 +124,11 @@
             calc = new Calculation(calculationType.division);
             part1 = rule.slice(0, index).trim();
             if(part1) {
-                calc.children.push(buildCalculation(part1));
+                calc.children.push(buildCalculation(part1, rules));
             }
             part2 = rule.slice(index + 1).trim();
             if(part2) {
-                calc.children.push(buildCalculation(part2));
+                calc.children.push(buildCalculation(part2, rules));
             }
             return calc;
         }
@@ -134,16 +137,23 @@
             calc = new Calculation(calculationType.power);
             part1 = rule.slice(0, index).trim();
             if(part1) {
-                calc.children.push(buildCalculation(part1));
+                calc.children.push(buildCalculation(part1, rules));
             }
             part2 = rule.slice(index + 1).trim();
             if(part2) {
-                calc.children.push(buildCalculation(part2));
+                calc.children.push(buildCalculation(part2, rules));
             }
             return calc;
         }
         if(rule[0] === '$') {
             return new Calculation(calculationType.placeholder, parseInt(rule.slice(1), 10));
+        }
+        var param = rules.filter(function (r) {
+            return r.name === rule;
+        })[0];
+        if(param) {
+            rule = param.derivation;
+            return buildCalculation(rule, rules);
         }
         rule = rule.trim();
         return new Calculation(calculationType.value, parseInt(rule, 10) || null);

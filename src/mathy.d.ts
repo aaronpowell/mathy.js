@@ -7,5 +7,6 @@ export module mathy {
     interface rule {
         name: string;
         derivation: string;
+        result: Boolean;
     }
 }

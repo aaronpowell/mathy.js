@@ -8,10 +8,11 @@ export module mathy {
 
         process() {
             var rules = this.getRules();
+            var results = rules.length === 1 ? rules : rules.filter(function (r) { return r.result; }, []);
             var node: Calculation;
             var outputs: number[] = [];
-            for(var i = 0; i < rules.length; i += 1) {
-                node = buildCalculation(rules[i].derivation.replace(/\s+/gi, ''));
+            for(var i = 0; i < results.length; i += 1) {
+                node = buildCalculation(results[i].derivation.replace(/\s+/gi, ''), rules);
                 outputs.push(calculate(node));
             }
             return outputs;
@@ -45,14 +46,14 @@ export module mathy {
         }
     }
 
-    function resolveParentesis(node: Calculation, group: number, part: string) {
+    function resolveParentesis(node: Calculation, group: number, part: string, rules: rule[]) {
         if (node.type === calculationType.placeholder && node.value === group) {
             node.type = calculationType.group;
-            node.children.push(buildCalculation(part));
+            node.children.push(buildCalculation(part, rules));
             return true;
         } else {
             for (var i = 0; i < node.children.length; i += 1) {
-                if (resolveParentesis(node.children[i], group, part)) {
+                if (resolveParentesis(node.children[i], group, part, rules)) {
                     return true;
                 }
             }
@@ -60,7 +61,7 @@ export module mathy {
         return false;
     }
 
-    function buildCalculation(rule: string) {
+    function buildCalculation(rule: string, rules: rule[]) {
         var index: number;
         var part1: string;
         var part2: string;
@@ -77,8 +78,8 @@ export module mathy {
 
             calc = new Calculation(calculationType.group);
             var group = ++groupCount;
-            calc.children.push(buildCalculation(part1 + '$' + group + part3));
-            resolveParentesis(calc.children[0], group, part2);
+            calc.children.push(buildCalculation(part1 + '$' + group + part3, rules));
+            resolveParentesis(calc.children[0], group, part2, rules);
             return calc;
         }
 
@@ -89,12 +90,12 @@ export module mathy {
 
             part1 = rule.slice(0, index).trim();
             if (part1) {
-                calc.children.push(buildCalculation(part1));
+                calc.children.push(buildCalculation(part1, rules));
             }
 
             part2 = rule.slice(index + 1).trim();
             if (part2) {
-                calc.children.push(buildCalculation(part2));
+                calc.children.push(buildCalculation(part2, rules));
             }
 
             return calc;
@@ -106,11 +107,11 @@ export module mathy {
             calc = new Calculation(calculationType.subtraction);
 
             part1 = rule.slice(0, index).trim();
-            calc.children.push(buildCalculation(part1));
+            calc.children.push(buildCalculation(part1, rules));
 
             part2 = rule.slice(index + 1).trim();
             if (part2) {
-                calc.children.push(buildCalculation(part2));
+                calc.children.push(buildCalculation(part2, rules));
             }
 
             return calc;
@@ -123,12 +124,12 @@ export module mathy {
 
             part1 = rule.slice(0, index).trim();
             if (part1) {
-                calc.children.push(buildCalculation(part1));
+                calc.children.push(buildCalculation(part1, rules));
             }
 
             part2 = rule.slice(index + 1).trim();
             if (part2) {
-                calc.children.push(buildCalculation(part2));
+                calc.children.push(buildCalculation(part2, rules));
             }
 
             return calc;
@@ -141,12 +142,12 @@ export module mathy {
 
             part1 = rule.slice(0, index).trim();
             if (part1) {
-                calc.children.push(buildCalculation(part1));
+                calc.children.push(buildCalculation(part1, rules));
             }
 
             part2 = rule.slice(index + 1).trim();
             if (part2) {
-                calc.children.push(buildCalculation(part2));
+                calc.children.push(buildCalculation(part2, rules));
             }
 
             return calc;
@@ -159,12 +160,12 @@ export module mathy {
 
             part1 = rule.slice(0, index).trim();
             if (part1) {
-                calc.children.push(buildCalculation(part1));
+                calc.children.push(buildCalculation(part1, rules));
             }
 
             part2 = rule.slice(index + 1).trim();
             if (part2) {
-                calc.children.push(buildCalculation(part2));
+                calc.children.push(buildCalculation(part2, rules));
             }
 
             return calc;
@@ -172,6 +173,12 @@ export module mathy {
 
         if (rule[0] === '$') {
             return new Calculation(calculationType.placeholder, parseInt(rule.slice(1), 10));
+        }
+
+        var param = rules.filter(function (r) { return r.name === rule; })[0];
+        if (param) {
+            rule = param.derivation;
+            return buildCalculation(rule, rules);
         }
 
         rule = rule.trim();
@@ -216,6 +223,7 @@ export module mathy {
     export interface rule {
         name: string;
         derivation: string;
+        result: Boolean;
     }
 
     class Calculation {
