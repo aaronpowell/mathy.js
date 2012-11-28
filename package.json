@@ -11,7 +11,7 @@
     "jasmine-node": "~1.0.26"
   },
   "scripts": {
-    "test": "node ./node_modules/typescript/bin/tsc --target ES5 src/mathy.ts && node ./node_modules/jasmine-node/bin/jasmine-node ./test"
+    "test": "make tests"
   },
   "repository": "",
   "keywords": [
