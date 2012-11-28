@@ -1,13 +1,13 @@
 REPORTER=spec
 
-TSC=$(BASE)node_modules\typescript\bin\tsc
-UGLIFYJS=$(BASE)node_modules\uglify-js\bin\uglifyjs
-RUNNER=$(BASE)node_modules\mocha\bin\mocha
+TSC=$(BASE)node_modules/typescript/bin/tsc
+UGLIFYJS=$(BASE)node_modules/uglify-js/bin/uglifyjs
+RUNNER=$(BASE)node_modules/mocha/bin/mocha
 
-SRC=$(BASE)src\mathy.ts
-OUT=$(BASE)src\mathy.js
-MIN=$(BASE)src\mathy.min.js
-
+SRC=$(BASE)src/mathy.ts
+OUT=$(BASE)src/mathy.js
+MIN=$(BASE)src/mathy.min.js
+TESTS=$(BASE)test
 build:
 	@echo "Compiling mathy from TypeScript source"
 	node $(TSC) --declaration --sourcemap --target ES5 $(SRC)
@@ -20,16 +20,16 @@ build-w:
 
 tests: build
 	@echo "Running tests"
-	node $(RUNNER) .\test --reporter $(REPORTER)
+	node $(RUNNER) $(TESTS) --reporter $(REPORTER)
 
 tests-w: build
 	@echo "Watching tests"
-	node $(RUNNER) .\test --reporter $(REPORTER) --watch --growl
+	node $(RUNNER) $(TESTS) --reporter $(REPORTER) --watch --growl
 
 tests-nyan: build
 	@echo "Running tests nyan style"
-	node $(RUNNER) .\test --reporter nyan
+	node $(RUNNER) $(TESTS) --reporter nyan
 
 tests-dbg: build
 	@echo "Running tests"
-	node --debug-brk $(RUNNER) .\test --reporter $(REPORTER)
+	node --debug-brk $(RUNNER) $(TESTS) --reporter $(REPORTER)
