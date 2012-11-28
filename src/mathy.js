@@ -229,3 +229,4 @@
     })(calculationType || (calculationType = {}));
 })(exports.mathy || (exports.mathy = {}));
 var mathy = exports.mathy;
+//@ sourceMappingURL=mathy.js.map
