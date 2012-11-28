@@ -1,6 +1,8 @@
 Mathy.js
 ---
 
+[![Build Status](https://travis-ci.org/aaronpowell/mathy.js.png)](https://travis-ci.org/aaronpowell/mathy.js)
+
 Mathy.js is a simple arithmetic calculation engine for node.js and the browser.
 
 It allows you to easily produce parameterized formulas and then get out the results based on what is passed in. It can also be used to execute a string as a formula.
@@ -18,7 +20,7 @@ Usage
     var result = engine.process();
     
     expect(result[0]).toEqual(3);
-    
+
 License
 ---
 
