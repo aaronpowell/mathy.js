@@ -8,7 +8,8 @@
   },
   "devDependencies": {
     "typescript": "~0.8.1",
-    "jasmine-node": "~1.0.26"
+    "mocha": "*",
+    "chai": "*"
   },
   "scripts": {
     "test": "make tests"

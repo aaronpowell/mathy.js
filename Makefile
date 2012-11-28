@@ -1,9 +1,9 @@
-REPORTER = dot
+REPORTER=spec
 
 TSC=$(BASE)node_modules\typescript\bin\tsc
 SRC=$(BASE)src\mathy.ts
 
-RUNNER=$(BASE)node_modules\jasmine-node\bin\jasmine-node
+RUNNER=$(BASE)node_modules\mocha\bin\mocha
 
 build:
 	@echo "Compiling mathy from TypeScript source"
@@ -17,10 +17,12 @@ build-w:
 
 tests: build
 	@echo "Running tests"
-	node $(RUNNER) .\test
+	node $(RUNNER) .\test --reporter $(REPORTER)
 
 tests-w: build
 	@echo "Watching tests"
-	node $(RUNNER) .\test --autotest
+	node $(RUNNER) .\test --reporter $(REPORTER) --watch --growl
 
-.PHONY: tests build
+tests-nyan: build
+	@echo "Running tests nyan style"
+	node $(RUNNER) .\test --reporter nyan

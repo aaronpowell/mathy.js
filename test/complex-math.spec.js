@@ -1,3 +1,5 @@
+var expect = require('chai').expect;
+
 describe('complex arithmatic operations', function () {
     var mathy = require('../index.js');
 
@@ -6,7 +8,7 @@ describe('complex arithmatic operations', function () {
 
         var result = engine.process();
 
-        expect(result[0]).toEqual(5);
+        expect(result[0]).to.equal(5);
     });
 
     it('should handle complex order of operations with powers', function () {
@@ -14,6 +16,6 @@ describe('complex arithmatic operations', function () {
 
         var result = engine.process();
 
-        expect(result[0]).toEqual(5);
+        expect(result[0]).to.equal(5);
     });
 });

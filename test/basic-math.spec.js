@@ -1,3 +1,5 @@
+var expect = require('chai').expect;
+
 describe('basic arithmatic operations', function () {
     var mathy = require('../index.js');
 
@@ -7,7 +9,7 @@ describe('basic arithmatic operations', function () {
 
             var result = engine.process();
 
-            expect(result[0]).toEqual(3);
+            expect(result[0]).to.equal(3);
         });
 
         it('should add three numbers', function () {
@@ -15,7 +17,7 @@ describe('basic arithmatic operations', function () {
 
             var result = engine.process();
 
-            expect(result[0]).toEqual(6);
+            expect(result[0]).to.equal(6);
         });
 
         it('should add heaps numbers', function () {
@@ -23,7 +25,7 @@ describe('basic arithmatic operations', function () {
 
             var result = engine.process();
 
-            expect(result[0]).toEqual(28);
+            expect(result[0]).to.equal(28);
         });
     });
 
@@ -33,7 +35,7 @@ describe('basic arithmatic operations', function () {
 
             var result = engine.process();
 
-            expect(result[0]).toEqual(1);
+            expect(result[0]).to.equal(1);
         });
 
         it('should subtract three numbers', function () {
@@ -41,7 +43,7 @@ describe('basic arithmatic operations', function () {
 
             var result = engine.process();
 
-            expect(result[0]).toEqual(0);
+            expect(result[0]).to.equal(0);
         });
 
         it('should subtract heaps numbers', function () {
@@ -49,7 +51,7 @@ describe('basic arithmatic operations', function () {
 
             var result = engine.process();
 
-            expect(result[0]).toEqual(-28);
+            expect(result[0]).to.equal(-28);
         });
     });
 
@@ -59,7 +61,7 @@ describe('basic arithmatic operations', function () {
 
             var result = engine.process();
 
-            expect(result[0]).toEqual(2);
+            expect(result[0]).to.equal(2);
         });
 
         it('should multiply three numbers', function () {
@@ -67,7 +69,7 @@ describe('basic arithmatic operations', function () {
 
             var result = engine.process();
 
-            expect(result[0]).toEqual(10);
+            expect(result[0]).to.equal(10);
         });
 
         it('should multiply heaps numbers', function () {
@@ -75,7 +77,7 @@ describe('basic arithmatic operations', function () {
 
             var result = engine.process();
 
-            expect(result[0]).toEqual(5040);
+            expect(result[0]).to.equal(5040);
         });
     });
 
@@ -85,7 +87,7 @@ describe('basic arithmatic operations', function () {
 
             var result = engine.process();
 
-            expect(result[0]).toEqual(1);
+            expect(result[0]).to.equal(1);
         });
 
         it('should divide three numbers', function () {
@@ -93,7 +95,7 @@ describe('basic arithmatic operations', function () {
 
             var result = engine.process();
 
-            expect(result[0]).toEqual(0.04);
+            expect(result[0]).to.equal(0.04);
         });
 
         it('should divide heaps numbers', function () {
@@ -101,7 +103,7 @@ describe('basic arithmatic operations', function () {
 
             var result = engine.process();
 
-            expect(result[0]).toEqual(0.0007936507936507935);
+            expect(result[0]).to.equal(0.0007936507936507935);
         });
     });
 
@@ -111,7 +113,7 @@ describe('basic arithmatic operations', function () {
 
             var result = engine.process();
 
-            expect(result[0]).toEqual(4);
+            expect(result[0]).to.equal(4);
         });
 
         it('should add numbers in parenthesis', function () {
@@ -119,7 +121,7 @@ describe('basic arithmatic operations', function () {
 
             var result = engine.process();
 
-            expect(result[0]).toEqual(6);
+            expect(result[0]).to.equal(6);
         });
 
         it('should allow multiple parenthesis groups', function () {
@@ -127,7 +129,7 @@ describe('basic arithmatic operations', function () {
 
             var result = engine.process();
 
-            expect(result[0]).toEqual(8);
+            expect(result[0]).to.equal(8);
         });
     });
 
@@ -137,7 +139,7 @@ describe('basic arithmatic operations', function () {
 
             var result = engine.process();
 
-            expect(result[0]).toEqual(100);
+            expect(result[0]).to.equal(100);
         });
 
         it('should calculate power of as a part of a fomula', function () {
@@ -145,7 +147,7 @@ describe('basic arithmatic operations', function () {
 
             var result = engine.process();
 
-            expect(result[0]).toEqual(200);
+            expect(result[0]).to.equal(200);
         });
     });
 
@@ -155,7 +157,7 @@ describe('basic arithmatic operations', function () {
 
             var result = engine.process();
 
-            expect(result[0]).toEqual(1);
+            expect(result[0]).to.equal(1);
         });
 
         it('should be able to handle negative powers', function () {
@@ -163,7 +165,7 @@ describe('basic arithmatic operations', function () {
 
             var result = engine.process();
 
-            expect(result[0]).toEqual(0.1);
+            expect(result[0]).to.equal(0.1);
         });
 
         it('should be able to handle negative powers with multiplication', function () {
@@ -171,7 +173,7 @@ describe('basic arithmatic operations', function () {
 
             var result = engine.process();
 
-            expect(result[0]).toEqual(0.02);
+            expect(result[0]).to.equal(0.02);
         });
     });
 });
