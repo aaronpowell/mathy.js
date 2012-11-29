@@ -18,4 +18,12 @@ describe('complex arithmatic operations', function () {
 
         expect(result[0]).to.equal(5);
     });
+
+    it('should allow calculations in exponents', function () {
+        var engine = new mathy.Engine({ name: 'a', derivation: '1 * 10 ^ (1+1)' });
+
+        var result = engine.process();
+
+        expect(result[0]).to.equal(100);
+    });
 });
