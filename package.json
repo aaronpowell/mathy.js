@@ -9,7 +9,8 @@
   "devDependencies": {
     "typescript": "~0.8.1",
     "mocha": "*",
-    "chai": "*"
+    "chai": "*",
+    "uglify-js": "~2.2.1"
   },
   "scripts": {
     "test": "make tests"

@@ -11,7 +11,7 @@ TESTS=$(BASE)test
 build:
 	@echo "Compiling mathy from TypeScript source"
 	node $(TSC) --declaration --sourcemap --target ES5 $(SRC)
-#	node $(UGLIFYJS) $(OUT) -o $(MIN) --source-map $(MIN).map --in-source-map $(OUT).map -p 5 -c -m
+	node $(UGLIFYJS) $(OUT) -o $(MIN) --source-map $(MIN).map -p 5 -c -m
 
 build-w:
 	@echo "Compiling mathy from TypeScript source"
