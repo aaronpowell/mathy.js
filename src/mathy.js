@@ -10,6 +10,9 @@
                 return rules;
             };
         }
+        Engine.prototype.add = function (rule) {
+            this.getRules().push(rule);
+        };
         Engine.prototype.process = function () {
             var rules = this.getRules();
             var results = rules.length === 1 ? rules : rules.filter(function (r) {

@@ -6,6 +6,10 @@ export module mathy {
             this.getRules = () => rules;
         }
 
+        add(rule: rule) {
+            this.getRules().push(rule);
+        }
+
         process() {
             var rules = this.getRules();
             var results = rules.length === 1 ? rules : rules.filter(function (r) { return r.result; }, []);
