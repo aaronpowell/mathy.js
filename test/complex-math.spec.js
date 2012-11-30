@@ -26,4 +26,28 @@ describe('complex arithmatic operations', function () {
 
         expect(result[0]).to.equal(100);
     });
+
+    it('should support two levels of parentesis', function () {
+        var engine = new mathy.Engine({ name: 'a', derivation: '(2 + (2))' });
+
+        var result = engine.process();
+
+        expect(result[0]).to.equal(4);
+    });
+
+    it('should support multiple levels of parentesis', function () {
+        var engine = new mathy.Engine({ name: 'a', derivation: '(2 + (2 + (2)))' });
+
+        var result = engine.process();
+
+        expect(result[0]).to.equal(6);
+    });
+
+    it('should support multiple levels of parentesis at any position', function () {
+        var engine = new mathy.Engine({ name: 'a', derivation: '1 + (2 + (2 + (2)))' });
+
+        var result = engine.process();
+
+        expect(result[0]).to.equal(7);
+    });
 });
