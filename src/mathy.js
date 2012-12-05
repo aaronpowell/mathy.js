@@ -32,26 +32,13 @@
     var groupCount = 0;
     function findParenthesis(text) {
         var counter = 0;
-        var open = -1;
         var close = -1;
         for(; ; ) {
-            open = text.indexOf('(', ++open);
             close = text.indexOf(')', ++close);
-            if(!~open && !~close) {
+            if(!~close) {
                 return -1;
             }
-            if(~open && open < close) {
-                counter++;
-                close = 0;
-            } else {
-                if(~close) {
-                    counter--;
-                    open = 0;
-                }
-            }
-            if(!counter) {
-                return open ? open : close;
-            }
+            return close;
         }
     }
     function resolveParentesis(node, group, part, rules) {
@@ -73,7 +60,7 @@
         var part1;
         var part2;
         var calc;
-        index = rule.indexOf('(');
+        index = rule.lastIndexOf('(');
         if(~index) {
             var end = index + findParenthesis(rule.slice(index));
             part1 = rule.slice(0, index);

@@ -27,26 +27,14 @@ export module mathy {
 
     function findParenthesis(text) {
         var counter = 0;
-        var open = -1;
         var close = -1;
         for(;;) {
-            open = text.indexOf('(', ++open);
             close = text.indexOf(')', ++close);
-            if (!~open && !~close) {
+            if (!~close) {
                 return -1;
             }
 
-            if (~open && open < close) {
-                counter++;
-                close = 0;
-            } else if (~close) {
-                counter--;
-                open = 0;
-            }
-
-            if (!counter) {
-                return open ? open : close;
-            }
+            return close;
         }
     }
 
@@ -71,7 +59,7 @@ export module mathy {
         var part2: string;
         var calc: Calculation;
 
-        index = rule.indexOf('(');
+        index = rule.lastIndexOf('(');
 
         if (~index) {
             var end = index + findParenthesis(rule.slice(index));
