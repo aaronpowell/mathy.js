@@ -64,7 +64,7 @@ And used like this:
 
     mathy "1 * 2 / 6 * 10 ^ 5"
 
-_Note: Some shells attempt to evaluate expressions so if you want to ensure it's not parsed by your shell make sure it's escaped.
+_Note: Some shells attempt to evaluate expressions so if you want to ensure it's not parsed by your shell make sure it's escaped._
 
 License
 ---
