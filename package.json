@@ -1,10 +1,17 @@
 {
-  "name": "mathy.js",
-  "version": "0.0.1",
+  "name": "mathy",
+  "version": "0.1.0",
   "description": "A simple formula evaluator and rules parser",
   "main": "./index.js",
   "directories": {
     "test": "test"
+  },
+  "bin": {
+    "mathy": "./bin/mathy"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/aaronpowell/mathy.js"
   },
   "devDependencies": {
     "typescript": "~0.8.1",
@@ -15,10 +22,10 @@
   "scripts": {
     "test": "make tests"
   },
-  "repository": "",
   "keywords": [
     "math",
-    "parser"
+    "parser",
+    "cli"
   ],
   "author": "Aaron Powell <me@aaron-powell.com> (https://github.com/aaronpowell)",
   "license": "MIT"
