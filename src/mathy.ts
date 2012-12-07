@@ -6,8 +6,9 @@ export module mathy {
             this.getRules = () => rules;
         }
 
-        add(rule: rule) {
-            this.getRules().push(rule);
+        add(...newRules: rule[]) {
+            var rules = this.getRules();
+            rules.push.apply(rules, newRules);
         }
 
         process() {

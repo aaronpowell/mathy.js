@@ -1,6 +1,6 @@
 {
   "name": "mathy",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "A simple formula evaluator and rules parser",
   "main": "./index.js",
   "directories": {
