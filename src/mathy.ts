@@ -106,12 +106,6 @@ export module mathy {
         var part2: string;
         var calc: Calculation;
 
-        index = rule.indexOf('?');
-
-        if (~index) {
-            return resolveDecision(index, rule, rules);
-        }
-
         index = rule.lastIndexOf('(');
 
         if (~index) {
@@ -126,6 +120,12 @@ export module mathy {
             calc.children.push(buildCalculation(part1 + '$' + group + part3, rules));
             resolveParentesis(calc.children[0], group, part2, rules);
             return calc;
+        }
+
+        index = rule.indexOf('?');
+
+        if (~index) {
+            return resolveDecision(index, rule, rules);
         }
 
         index = rule.lastIndexOf('+');

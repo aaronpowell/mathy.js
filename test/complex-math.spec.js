@@ -50,4 +50,12 @@ describe('complex arithmatic operations', function () {
 
         expect(result[0]).to.equal(7);
     });
+
+    it('should allow decisions inside formulas', function () {
+        var engine = new mathy.Engine({ name: 'a', derivation: '1 + (true ? 2 : -1)'});
+debugger;
+        var result = engine.process();
+
+        expect(result[0]).to.equal(3);
+    });
 });

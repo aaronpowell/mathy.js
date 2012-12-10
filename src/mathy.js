@@ -107,10 +107,6 @@
         var part1;
         var part2;
         var calc;
-        index = rule.indexOf('?');
-        if(~index) {
-            return resolveDecision(index, rule, rules);
-        }
         index = rule.lastIndexOf('(');
         if(~index) {
             var end = index + findParenthesis(rule.slice(index));
@@ -122,6 +118,10 @@
             calc.children.push(buildCalculation(part1 + '$' + group + part3, rules));
             resolveParentesis(calc.children[0], group, part2, rules);
             return calc;
+        }
+        index = rule.indexOf('?');
+        if(~index) {
+            return resolveDecision(index, rule, rules);
         }
         index = rule.lastIndexOf('+');
         if(~index) {
