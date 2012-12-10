@@ -65,7 +65,7 @@ describe('parameter decisions', function () {
                 { name: 'a', derivation: 'b + 1', result: true },
                 { name: 'b', derivation: 'true ? 1 : 0' }
             );
-debugger;
+
             var result = engine.process();
 
             expect(result[0]).to.equal(2);
