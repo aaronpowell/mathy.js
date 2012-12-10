@@ -60,11 +60,23 @@
         }
         return false;
     }
+    function resolveDecision(index, rule, rules) {
+        var condition = rule.slice(0, index);
+        var parts = rule.slice(index + 1).split(':');
+        if(condition === 'true') {
+            return buildCalculation(parts[0], rules);
+        }
+        return buildCalculation(parts[1], rules);
+    }
     function buildCalculation(rule, rules) {
         var index;
         var part1;
         var part2;
         var calc;
+        index = rule.indexOf('?');
+        if(~index) {
+            return resolveDecision(index, rule, rules);
+        }
         index = rule.lastIndexOf('(');
         if(~index) {
             var end = index + findParenthesis(rule.slice(index));

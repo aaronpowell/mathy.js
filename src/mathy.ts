@@ -54,11 +54,28 @@ export module mathy {
         return false;
     }
 
+    function resolveDecision(index: number, rule: string, rules: rule[]): Calculation {
+        var condition = rule.slice(0, index);
+        var parts = rule.slice(index + 1).split(':');
+
+        if (condition === 'true') {
+            return buildCalculation(parts[0], rules);
+        }
+
+        return buildCalculation(parts[1], rules);
+    }
+
     function buildCalculation(rule: string, rules: rule[]) {
         var index: number;
         var part1: string;
         var part2: string;
         var calc: Calculation;
+
+        index = rule.indexOf('?');
+
+        if (~index) {
+            return resolveDecision(index, rule, rules);
+        }
 
         index = rule.lastIndexOf('(');
 
