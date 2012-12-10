@@ -1,5 +1,7 @@
 'use strict';
 export module mathy {
+    var cleaner = /\s+/gi;
+
     export class Engine {
         getRules: () => rule[];
         constructor(...rules: rule[]) {
@@ -17,7 +19,7 @@ export module mathy {
             var node: Calculation;
             var outputs: number[] = [];
             for(var i = 0; i < results.length; i += 1) {
-                node = buildCalculation(results[i].derivation.replace(/\s+/gi, ''), rules);
+                node = buildCalculation(results[i].derivation, rules);
                 outputs.push(calculate(node));
             }
             return outputs;
@@ -105,6 +107,8 @@ export module mathy {
         var part1: string;
         var part2: string;
         var calc: Calculation;
+
+        rule = rule.replace(cleaner, '');
 
         index = rule.lastIndexOf('(');
 
@@ -262,7 +266,7 @@ export module mathy {
                 return node.value;
 
             case calculationType.decision:
-                return node.value = node.children[0].value ? node.children[1].value : node.children[2].value;
+                return node.value = (node.children[0].value ? node.children[1].value : node.children[2].value);
 
             case calculationType.boolean:
                 return node.value;

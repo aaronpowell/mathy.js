@@ -1,5 +1,6 @@
 'use strict';
 (function (mathy) {
+    var cleaner = /\s+/gi;
     var Engine = (function () {
         function Engine() {
             var rules = [];
@@ -26,7 +27,7 @@
             var node;
             var outputs = [];
             for(var i = 0; i < results.length; i += 1) {
-                node = buildCalculation(results[i].derivation.replace(/\s+/gi, ''), rules);
+                node = buildCalculation(results[i].derivation, rules);
                 outputs.push(calculate(node));
             }
             return outputs;
@@ -107,6 +108,7 @@
         var part1;
         var part2;
         var calc;
+        rule = rule.replace(cleaner, '');
         index = rule.lastIndexOf('(');
         if(~index) {
             var end = index + findParenthesis(rule.slice(index));
@@ -236,7 +238,7 @@
 
             }
             case calculationType.decision: {
-                return node.value = node.children[0].value ? node.children[1].value : node.children[2].value;
+                return node.value = (node.children[0].value ? node.children[1].value : node.children[2].value);
 
             }
             case calculationType.boolean: {

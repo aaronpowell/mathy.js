@@ -59,5 +59,16 @@ describe('parameter decisions', function () {
 
             expect(result[0]).to.equal(1);
         });
-    })
-})
+
+        it('should allow an additional parameter to be a decision', function () {
+            var engine = new mathy.Engine(
+                { name: 'a', derivation: 'b + 1', result: true },
+                { name: 'b', derivation: 'true ? 1 : 0' }
+            );
+debugger;
+            var result = engine.process();
+
+            expect(result[0]).to.equal(2);
+        });
+    });
+});
