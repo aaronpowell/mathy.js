@@ -64,10 +64,21 @@
         var condition = rule.slice(0, index);
         var parts = rule.slice(index + 1).split(':');
         var calc = new Calculation(calculationType.decision);
-        if(condition === 'true') {
+        if(condition.toLowerCase() === 'true') {
             calc.children.push(new Calculation(calculationType.boolean, true));
         } else {
-            calc.children.push(new Calculation(calculationType.boolean, false));
+            if(condition.toLowerCase() === 'false') {
+                calc.children.push(new Calculation(calculationType.boolean, false));
+            } else {
+                index = condition.indexOf('===');
+                var decisionCalc;
+                if(~index) {
+                    decisionCalc = new Calculation(calculationType.equals);
+                    decisionCalc.children.push(buildCalculation(condition.slice(0, index), rules));
+                    decisionCalc.children.push(buildCalculation(condition.slice(index + 3), rules));
+                }
+                calc.children.push(decisionCalc);
+            }
         }
         calc.children.push(buildCalculation(parts[0], rules));
         calc.children.push(buildCalculation(parts[1], rules));
@@ -168,7 +179,7 @@
             return buildCalculation(rule, rules);
         }
         rule = rule.trim();
-        return new Calculation(calculationType.value, parseInt(rule, 10) || null);
+        return new Calculation(calculationType.value, parseInt(rule, 10) || rule.trim());
     }
     function calculate(node) {
         if(!node) {
@@ -214,6 +225,10 @@
                 return node.value;
 
             }
+            case calculationType.equals: {
+                return node.value = node.children[0].value === node.children[1].value;
+
+            }
         }
         return 0;
     }
@@ -250,6 +265,8 @@
         calculationType.decision = 8;
         calculationType._map[9] = "boolean";
         calculationType.boolean = 9;
+        calculationType._map[10] = "equals";
+        calculationType.equals = 10;
     })(calculationType || (calculationType = {}));
 })(exports.mathy || (exports.mathy = {}));
 var mathy = exports.mathy;

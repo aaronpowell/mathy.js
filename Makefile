@@ -32,4 +32,4 @@ tests-nyan: build
 
 tests-dbg: build
 	@echo "Running tests"
-	node --debug-brk $(RUNNER) $(TESTS) --reporter $(REPORTER)
+	node $(RUNNER) $(TESTS) --reporter $(REPORTER) --debug-brk

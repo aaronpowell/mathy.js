@@ -19,5 +19,21 @@ describe('parameter decisions', function () {
 
             expect(result[0]).to.equal(-1);
         });
+
+        it('should allow a dynamic decision to false', function () {
+            var engine = new mathy.Engine({ name: 'a', derivation: 'foo === bar ? 1 : -1' });
+
+            var result = engine.process();
+
+            expect(result[0]).to.equal(-1);
+        });
+
+        it('should allow a dynamic decision to true', function () {
+            var engine = new mathy.Engine({ name: 'a', derivation: 'foo === foo ? 1 : -1' });
+
+            var result = engine.process();
+
+            expect(result[0]).to.equal(1);
+        });
     })
 })

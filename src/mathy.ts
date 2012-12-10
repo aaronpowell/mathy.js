@@ -59,10 +59,20 @@ export module mathy {
         var parts = rule.slice(index + 1).split(':');
         var calc = new Calculation(calculationType.decision);
 
-        if (condition === 'true') {
+        if (condition.toLowerCase() === 'true') {
             calc.children.push(new Calculation(calculationType.boolean, true));
-        } else {
+        } else if (condition.toLowerCase() === 'false') {
             calc.children.push(new Calculation(calculationType.boolean, false));
+        } else {
+            index = condition.indexOf('===');
+            var decisionCalc: Calculation;
+            if (~index) {
+                decisionCalc = new Calculation(calculationType.equals);
+                decisionCalc.children.push(buildCalculation(condition.slice(0, index), rules));
+                decisionCalc.children.push(buildCalculation(condition.slice(index + 3), rules));
+            }
+
+            calc.children.push(decisionCalc);
         }
 
         calc.children.push(buildCalculation(parts[0], rules));
@@ -198,7 +208,7 @@ export module mathy {
         }
 
         rule = rule.trim();
-        return new Calculation(calculationType.value, parseInt(rule, 10) || null);
+        return new Calculation(calculationType.value, parseInt(rule, 10) || rule.trim());
     }
 
     function calculate(node: Calculation) {
@@ -237,6 +247,9 @@ export module mathy {
 
             case calculationType.boolean:
                 return node.value;
+
+            case calculationType.equals:
+                return node.value = node.children[0].value === node.children[1].value;
         }
 
         return 0;
@@ -263,6 +276,7 @@ export module mathy {
         value,
         placeholder,
         decision,
-        boolean
+        boolean,
+        equals
     }
 }
