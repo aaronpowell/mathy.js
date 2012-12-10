@@ -57,12 +57,18 @@ export module mathy {
     function resolveDecision(index: number, rule: string, rules: rule[]): Calculation {
         var condition = rule.slice(0, index);
         var parts = rule.slice(index + 1).split(':');
+        var calc = new Calculation(calculationType.decision);
 
         if (condition === 'true') {
-            return buildCalculation(parts[0], rules);
+            calc.children.push(new Calculation(calculationType.boolean, true));
+        } else {
+            calc.children.push(new Calculation(calculationType.boolean, false));
         }
 
-        return buildCalculation(parts[1], rules);
+        calc.children.push(buildCalculation(parts[0], rules));
+        calc.children.push(buildCalculation(parts[1], rules));
+
+        return calc;
     }
 
     function buildCalculation(rule: string, rules: rule[]) {
@@ -225,6 +231,12 @@ export module mathy {
 
             case calculationType.value:
                 return node.value;
+
+            case calculationType.decision:
+                return node.value = node.children[0].value ? node.children[1].value : node.children[2].value;
+
+            case calculationType.boolean:
+                return node.value;
         }
 
         return 0;
@@ -237,7 +249,7 @@ export module mathy {
     }
 
     class Calculation {
-        constructor(public type?: calculationType, public value: number = 0, public children?: Calculation[] = []) {
+        constructor(public type?: calculationType, public value: any = 0, public children?: Calculation[] = []) {
         }
     }
 
@@ -249,6 +261,8 @@ export module mathy {
         group,
         power,
         value,
-        placeholder
+        placeholder,
+        decision,
+        boolean
     }
 }

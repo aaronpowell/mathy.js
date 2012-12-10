@@ -63,10 +63,15 @@
     function resolveDecision(index, rule, rules) {
         var condition = rule.slice(0, index);
         var parts = rule.slice(index + 1).split(':');
+        var calc = new Calculation(calculationType.decision);
         if(condition === 'true') {
-            return buildCalculation(parts[0], rules);
+            calc.children.push(new Calculation(calculationType.boolean, true));
+        } else {
+            calc.children.push(new Calculation(calculationType.boolean, false));
         }
-        return buildCalculation(parts[1], rules);
+        calc.children.push(buildCalculation(parts[0], rules));
+        calc.children.push(buildCalculation(parts[1], rules));
+        return calc;
     }
     function buildCalculation(rule, rules) {
         var index;
@@ -201,6 +206,14 @@
                 return node.value;
 
             }
+            case calculationType.decision: {
+                return node.value = node.children[0].value ? node.children[1].value : node.children[2].value;
+
+            }
+            case calculationType.boolean: {
+                return node.value;
+
+            }
         }
         return 0;
     }
@@ -233,6 +246,10 @@
         calculationType.value = 6;
         calculationType._map[7] = "placeholder";
         calculationType.placeholder = 7;
+        calculationType._map[8] = "decision";
+        calculationType.decision = 8;
+        calculationType._map[9] = "boolean";
+        calculationType.boolean = 9;
     })(calculationType || (calculationType = {}));
 })(exports.mathy || (exports.mathy = {}));
 var mathy = exports.mathy;
