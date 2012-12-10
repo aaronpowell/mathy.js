@@ -64,12 +64,31 @@ export module mathy {
         } else if (condition.toLowerCase() === 'false') {
             calc.children.push(new Calculation(calculationType.boolean, false));
         } else {
-            index = condition.indexOf('===');
             var decisionCalc: Calculation;
+            index = condition.indexOf('===');
             if (~index) {
-                decisionCalc = new Calculation(calculationType.equals);
+                decisionCalc = new Calculation(calculationType.equal);
                 decisionCalc.children.push(buildCalculation(condition.slice(0, index), rules));
                 decisionCalc.children.push(buildCalculation(condition.slice(index + 3), rules));
+            }
+            index = condition.indexOf('!==');
+            if (~index) {
+                decisionCalc = new Calculation(calculationType.notEqual);
+                decisionCalc.children.push(buildCalculation(condition.slice(0, index), rules));
+                decisionCalc.children.push(buildCalculation(condition.slice(index + 3), rules));
+            }
+            index = condition.indexOf('<');
+            if (~index) {
+                decisionCalc = new Calculation(calculationType.lessThan);
+                decisionCalc.children.push(buildCalculation(condition.slice(0, index), rules));
+                decisionCalc.children.push(buildCalculation(condition.slice(index + 1), rules));
+            }
+
+            index = condition.indexOf('>');
+            if (~index) {
+                decisionCalc = new Calculation(calculationType.greaterThan);
+                decisionCalc.children.push(buildCalculation(condition.slice(0, index), rules));
+                decisionCalc.children.push(buildCalculation(condition.slice(index + 1), rules));
             }
 
             calc.children.push(decisionCalc);
@@ -248,8 +267,17 @@ export module mathy {
             case calculationType.boolean:
                 return node.value;
 
-            case calculationType.equals:
+            case calculationType.equal:
                 return node.value = node.children[0].value === node.children[1].value;
+
+            case calculationType.notEqual:
+                return node.value = node.children[0].value !== node.children[1].value;
+
+            case calculationType.lessThan:
+                return node.value = node.children[0].value < node.children[1].value;
+
+            case calculationType.greaterThan:
+                return node.value = node.children[0].value > node.children[1].value;
         }
 
         return 0;
@@ -277,6 +305,9 @@ export module mathy {
         placeholder,
         decision,
         boolean,
-        equals
+        equal,
+        notEqual,
+        lessThan,
+        greaterThan
     }
 }

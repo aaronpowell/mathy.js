@@ -35,5 +35,29 @@ describe('parameter decisions', function () {
 
             expect(result[0]).to.equal(1);
         });
+
+        it('should allow a less-than decision to true', function () {
+            var engine = new mathy.Engine({ name: 'a', derivation: '2 < 3 ? 1 : -1' });
+
+            var result = engine.process();
+
+            expect(result[0]).to.equal(1);
+        });
+
+        it('should allow a greater-than decision to true', function () {
+            var engine = new mathy.Engine({ name: 'a', derivation: '3 > 2 ? 1 : -1' });
+
+            var result = engine.process();
+
+            expect(result[0]).to.equal(1);
+        });
+
+        it('should allow a not equal decision to true', function () {
+            var engine = new mathy.Engine({ name: 'a', derivation: '3 !== 2 ? 1 : -1' });
+
+            var result = engine.process();
+
+            expect(result[0]).to.equal(1);
+        });
     })
 })

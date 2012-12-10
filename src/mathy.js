@@ -70,12 +70,30 @@
             if(condition.toLowerCase() === 'false') {
                 calc.children.push(new Calculation(calculationType.boolean, false));
             } else {
-                index = condition.indexOf('===');
                 var decisionCalc;
+                index = condition.indexOf('===');
                 if(~index) {
-                    decisionCalc = new Calculation(calculationType.equals);
+                    decisionCalc = new Calculation(calculationType.equal);
                     decisionCalc.children.push(buildCalculation(condition.slice(0, index), rules));
                     decisionCalc.children.push(buildCalculation(condition.slice(index + 3), rules));
+                }
+                index = condition.indexOf('!==');
+                if(~index) {
+                    decisionCalc = new Calculation(calculationType.notEqual);
+                    decisionCalc.children.push(buildCalculation(condition.slice(0, index), rules));
+                    decisionCalc.children.push(buildCalculation(condition.slice(index + 3), rules));
+                }
+                index = condition.indexOf('<');
+                if(~index) {
+                    decisionCalc = new Calculation(calculationType.lessThan);
+                    decisionCalc.children.push(buildCalculation(condition.slice(0, index), rules));
+                    decisionCalc.children.push(buildCalculation(condition.slice(index + 1), rules));
+                }
+                index = condition.indexOf('>');
+                if(~index) {
+                    decisionCalc = new Calculation(calculationType.greaterThan);
+                    decisionCalc.children.push(buildCalculation(condition.slice(0, index), rules));
+                    decisionCalc.children.push(buildCalculation(condition.slice(index + 1), rules));
                 }
                 calc.children.push(decisionCalc);
             }
@@ -225,8 +243,20 @@
                 return node.value;
 
             }
-            case calculationType.equals: {
+            case calculationType.equal: {
                 return node.value = node.children[0].value === node.children[1].value;
+
+            }
+            case calculationType.notEqual: {
+                return node.value = node.children[0].value !== node.children[1].value;
+
+            }
+            case calculationType.lessThan: {
+                return node.value = node.children[0].value < node.children[1].value;
+
+            }
+            case calculationType.greaterThan: {
+                return node.value = node.children[0].value > node.children[1].value;
 
             }
         }
@@ -265,8 +295,14 @@
         calculationType.decision = 8;
         calculationType._map[9] = "boolean";
         calculationType.boolean = 9;
-        calculationType._map[10] = "equals";
-        calculationType.equals = 10;
+        calculationType._map[10] = "equal";
+        calculationType.equal = 10;
+        calculationType._map[11] = "notEqual";
+        calculationType.notEqual = 11;
+        calculationType._map[12] = "lessThan";
+        calculationType.lessThan = 12;
+        calculationType._map[13] = "greaterThan";
+        calculationType.greaterThan = 13;
     })(calculationType || (calculationType = {}));
 })(exports.mathy || (exports.mathy = {}));
 var mathy = exports.mathy;
