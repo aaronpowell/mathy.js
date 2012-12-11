@@ -224,7 +224,7 @@ export module mathy {
             return new Calculation(calculationType.placeholder, parseInt(rule.slice(1), 10));
         }
 
-        var param = rules.filter(function (r) { return r.name === rule; })[0];
+        var param = rules.filter((r) => r.name === rule)[0];
         if (param) {
             rule = param.derivation;
             return buildCalculation(rule, rules);
