@@ -59,7 +59,9 @@ describe('parameter decisions', function () {
 
             expect(result[0]).to.equal(1);
         });
+    });
 
+    describe('decisions and parameters', function () {
         it('should allow an additional parameter to be a decision', function () {
             var engine = new mathy.Engine(
                 { name: 'a', derivation: 'b + 1', result: true },
@@ -69,6 +71,55 @@ describe('parameter decisions', function () {
             var result = engine.process();
 
             expect(result[0]).to.equal(2);
+        });
+
+        it('should allow part of the decision input to be a parameter', function () {
+            var engine = new mathy.Engine(
+                { name: 'a', derivation: 'b === 1 ? 1 : -1', result: true },
+                { name: 'b', derivation: '1' }
+            );
+
+            var result = engine.process();
+
+            expect(result[0]).to.equal(1);
+        });
+
+        it('should handle the result of a decision being a parameter', function () {
+            var engine = new mathy.Engine(
+                { name: 'a', derivation: 'true ? b : c', result: true },
+                { name: 'b', derivation: '1' },
+                { name: 'c', derivation: '-1' }
+            );
+
+            var result = engine.process();
+
+            expect(result[0]).to.equal(1);
+        });
+
+        it('should handle a decisions input parameter being a decision', function () {
+            var engine = new mathy.Engine(
+                { name: 'a', derivation: 'd ? b : c', result: true },
+                { name: 'b', derivation: '1' },
+                { name: 'c', derivation: '-1' },
+                { name: 'd', derivation: 'c === -1 ? true : false'}
+            );
+
+            var result = engine.process();
+
+            expect(result[0]).to.equal(1);
+        });
+
+        it('should handle a decisions input parameter being a decision with a false value', function () {
+            var engine = new mathy.Engine(
+                { name: 'a', derivation: 'd ? b : c', result: true },
+                { name: 'b', derivation: '1' },
+                { name: 'c', derivation: '-1' },
+                { name: 'd', derivation: 'c === 1 ? true : false'}
+            );
+
+            var result = engine.process();
+
+            expect(result[0]).to.equal(-1);
         });
     });
 });

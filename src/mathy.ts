@@ -72,32 +72,32 @@ export module mathy {
                 decisionCalc = new Calculation(calculationType.equal);
                 decisionCalc.children.push(buildCalculation(condition.slice(0, index), rules));
                 decisionCalc.children.push(buildCalculation(condition.slice(index + 3), rules));
-            }
-            index = condition.indexOf('!==');
-            if (~index) {
+            } else if (~(index = condition.indexOf('!=='))) {
                 decisionCalc = new Calculation(calculationType.notEqual);
                 decisionCalc.children.push(buildCalculation(condition.slice(0, index), rules));
                 decisionCalc.children.push(buildCalculation(condition.slice(index + 3), rules));
-            }
-            index = condition.indexOf('<');
-            if (~index) {
+            } else if (~(index = condition.indexOf('<'))) {
                 decisionCalc = new Calculation(calculationType.lessThan);
                 decisionCalc.children.push(buildCalculation(condition.slice(0, index), rules));
                 decisionCalc.children.push(buildCalculation(condition.slice(index + 1), rules));
-            }
-
-            index = condition.indexOf('>');
-            if (~index) {
+            } else if (~(index = condition.indexOf('>'))) {
                 decisionCalc = new Calculation(calculationType.greaterThan);
                 decisionCalc.children.push(buildCalculation(condition.slice(0, index), rules));
                 decisionCalc.children.push(buildCalculation(condition.slice(index + 1), rules));
+            } else {
+                decisionCalc = buildCalculation(condition, rules);
             }
 
             calc.children.push(decisionCalc);
         }
 
-        calc.children.push(buildCalculation(parts[0], rules));
-        calc.children.push(buildCalculation(parts[1], rules));
+        if (parts.length) {
+            calc.children.push(buildCalculation(parts[0], rules));
+            calc.children.push(buildCalculation(parts[1], rules));
+        } else {
+            calc.children.push(new Calculation(calculationType.value, true));
+            calc.children.push(new Calculation(calculationType.value, false));
+        }
 
         return calc;
     }
@@ -231,7 +231,18 @@ export module mathy {
         }
 
         rule = rule.trim();
-        return new Calculation(calculationType.value, parseInt(rule, 10) || rule.trim());
+        var val: any;
+        val = parseInt(rule, 10);
+        if (isNaN(val)) {
+            val = rule === 'true';
+            if (!val) {
+                val = !(rule === 'false');
+                if (val) {
+                    val = rule;
+                }
+            }
+        }
+        return new Calculation(calculationType.value, val);
     }
 
     function calculate(node: Calculation) {
