@@ -25,10 +25,12 @@
                 return r.result;
             }, []);
             var node;
-            var outputs = [];
+            var outputs = {
+            };
             for(var i = 0; i < results.length; i += 1) {
                 node = buildCalculation(results[i].derivation, rules);
-                outputs.push(calculate(node));
+                outputs[i] = calculate(node);
+                outputs[results[i].name] = node;
             }
             return outputs;
         };
@@ -269,8 +271,8 @@
             this.children = children;
         }
         return Calculation;
-    })();    
-    var calculationType;
+    })();
+    mathy.Calculation = Calculation;    
     (function (calculationType) {
         calculationType._map = [];
         calculationType._map[0] = "add";
@@ -301,7 +303,8 @@
         calculationType.lessThan = 12;
         calculationType._map[13] = "greaterThan";
         calculationType.greaterThan = 13;
-    })(calculationType || (calculationType = {}));
+    })(mathy.calculationType || (mathy.calculationType = {}));
+    var calculationType = mathy.calculationType;
 })(exports.mathy || (exports.mathy = {}));
 var mathy = exports.mathy;
 //@ sourceMappingURL=mathy.js.map

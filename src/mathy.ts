@@ -17,10 +17,11 @@ export module mathy {
             var rules = this.getRules();
             var results = rules.length === 1 ? rules : rules.filter((r) => r.result, []);
             var node: Calculation;
-            var outputs: number[] = [];
+            var outputs = { };
             for(var i = 0; i < results.length; i += 1) {
                 node = buildCalculation(results[i].derivation, rules);
-                outputs.push(calculate(node));
+                outputs[i] = calculate(node);
+                outputs[results[i].name] = node;
             }
             return outputs;
         }
@@ -280,12 +281,12 @@ export module mathy {
         result: Boolean;
     }
 
-    class Calculation {
+    export class Calculation {
         constructor(public type?: calculationType, public value: any = 0, public children?: Calculation[] = []) {
         }
     }
 
-    enum calculationType {
+    export enum calculationType {
         add,
         subtraction,
         multiply,
