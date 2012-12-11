@@ -36,17 +36,6 @@
     })();
     mathy.Engine = Engine;    
     var groupCount = 0;
-    function findParenthesis(text) {
-        var counter = 0;
-        var close = -1;
-        for(; ; ) {
-            close = text.indexOf(')', ++close);
-            if(!~close) {
-                return -1;
-            }
-            return close;
-        }
-    }
     function resolveParentesis(node, group, part, rules) {
         if(node.type === calculationType.placeholder && node.value === group) {
             node.type = calculationType.group;
@@ -118,7 +107,7 @@
         rule = rule.replace(cleaner, '');
         index = rule.lastIndexOf('(');
         if(~index) {
-            var end = index + findParenthesis(rule.slice(index));
+            var end = index + rule.slice(index).indexOf(')');
             part1 = rule.slice(0, index);
             part2 = rule.slice(index + 1, end);
             var part3 = rule.slice(end + 1);
