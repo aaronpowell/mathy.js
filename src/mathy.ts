@@ -15,7 +15,7 @@ export module mathy {
 
         process() {
             var rules = this.getRules();
-            var results = rules.length === 1 ? rules : rules.filter(function (r) { return r.result; }, []);
+            var results = rules.length === 1 ? rules : rules.filter((r) => r.result, []);
             var node: Calculation;
             var outputs: number[] = [];
             for(var i = 0; i < results.length; i += 1) {
