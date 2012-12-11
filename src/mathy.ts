@@ -218,18 +218,7 @@ export module mathy {
         }
 
         rule = rule.trim();
-        var val: any;
-        val = parseInt(rule, 10);
-        if (isNaN(val)) {
-            val = rule === 'true';
-            if (!val) {
-                val = !(rule === 'false');
-                if (val) {
-                    val = rule;
-                }
-            }
-        }
-        return new Calculation(calculationType.value, val);
+        return new Calculation(calculationType.value, parseInt(rule, 10) || (rule === 'true' ? true : rule === 'false' ? <any>false : rule));
     }
 
     function calculate(node: Calculation) {
