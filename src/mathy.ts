@@ -3,6 +3,8 @@ export module mathy {
     var cleaner = /\s+/gi;
 
     export class Engine {
+        public version = '0.2.0';
+
         getRules: () => rule[];
         constructor(...rules: rule[]) {
             this.getRules = () => rules;
@@ -283,6 +285,50 @@ export module mathy {
 
     export class Calculation {
         constructor(public type?: calculationType, public value: any = 0, public children?: Calculation[] = []) {
+        }
+
+        toString() {
+            var str = '';
+
+            if (this.children[0]) {
+                str += this.children[0].toString();
+            }
+
+            switch (this.type) {
+                case calculationType.add:
+                    str += ' + ';
+                    break;
+
+                case calculationType.subtraction:
+                    str += ' -';
+                    break;
+
+                case calculationType.multiply:
+                    str += ' * ';
+                    break;
+
+                case calculationType.division:
+                    str += ' / ';
+                    break;
+
+                case calculationType.group:
+                    str += '(';
+                    break;
+
+                case calculationType.power:
+                    str += '^';
+                    break;
+
+                case calculationType.value:
+                    str += this.value;
+                    break;
+            }
+
+            if (this.children[1]) {
+                str += this.children[1].toString();
+            }
+
+            return str;
         }
     }
 

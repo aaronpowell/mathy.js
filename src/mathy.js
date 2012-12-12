@@ -7,6 +7,7 @@
             for (var _i = 0; _i < (arguments.length - 0); _i++) {
                 rules[_i] = arguments[_i + 0];
             }
+            this.version = '0.2.0';
             this.getRules = function () {
                 return rules;
             };
@@ -270,6 +271,53 @@
             this.value = value;
             this.children = children;
         }
+        Calculation.prototype.toString = function () {
+            var str = '';
+            if(this.children[0]) {
+                str += this.children[0].toString();
+            }
+            switch(this.type) {
+                case calculationType.add: {
+                    str += ' + ';
+                    break;
+
+                }
+                case calculationType.subtraction: {
+                    str += ' -';
+                    break;
+
+                }
+                case calculationType.multiply: {
+                    str += ' * ';
+                    break;
+
+                }
+                case calculationType.division: {
+                    str += ' / ';
+                    break;
+
+                }
+                case calculationType.group: {
+                    str += '(';
+                    break;
+
+                }
+                case calculationType.power: {
+                    str += '^';
+                    break;
+
+                }
+                case calculationType.value: {
+                    str += this.value;
+                    break;
+
+                }
+            }
+            if(this.children[1]) {
+                str += this.children[1].toString();
+            }
+            return str;
+        };
         return Calculation;
     })();
     mathy.Calculation = Calculation;    

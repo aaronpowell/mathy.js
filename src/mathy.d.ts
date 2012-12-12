@@ -1,5 +1,6 @@
 export module mathy {
     class Engine {
+        public version: string;
         public getRules: () => rule[];
         constructor (...rules: rule[]);
         public add(...newRules: rule[]): void;
@@ -15,6 +16,7 @@ export module mathy {
         public value: any;
         public children: Calculation[];
         constructor (type?: calculationType, value?: any, children?: Calculation[]);
+        public toString();
     }
     enum calculationType {
         add,
