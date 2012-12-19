@@ -122,4 +122,24 @@ describe('parameter decisions', function () {
             expect(result[0]).to.equal(-1);
         });
     });
+
+    describe('decisions and parenthesis', function () {
+        it('should be fine with the decision in parenthesis', function () {
+            var engine = new mathy.Engine(
+                { name: 'a', derivation: '(1 === 1) ? 1 : -1' }
+            );
+
+            var result = engine.process();
+
+            expect(result[0]).to.equal(1);
+        });
+
+        it('should allow nested decisions when you uses parenthesis', function () {
+            var engine = new mathy.Engine({ name: 'a', derivation: 'true ? (false ? 1 : -1) : -2' });
+
+            var result = engine.process();
+
+            expect(result[0]).to.equal(-1);
+        });
+    });
 });

@@ -1,5 +1,4 @@
-Mathy.js
----
+# Mathy.js
 
 [![Build Status](https://travis-ci.org/aaronpowell/mathy.js.png)](https://travis-ci.org/aaronpowell/mathy.js)
 
@@ -9,8 +8,7 @@ It allows you to easily produce parameterized formulas and then get out the resu
 
 _Site note: The minified versions source map doesn't match by to the TypeScript source map as I can't get that working yet._
 
-Install
----
+# Install
 
 This can be used as either a node.js package or in the browser.
 
@@ -22,8 +20,7 @@ Browser:
 
     <script src="/lib/mathy.js"></script>
 
-Usage
----
+# Usage
 
     var mathy = require('mathy');
     
@@ -52,9 +49,44 @@ Alternatively you can provide parameters to formulas if you have something more 
 
     expect(result[0]).toEqual(450);
 
+## Parmaters
 
-CLI
-----
+While mathy is designed around mathematical formula parsing it does have a few more advanced features for dealing with _smart_ parameters.
+
+### Binary choice parameters
+
+Mathy supports the idea of a binary choice, or decision, parameter, allowing you to have a parameter like this:
+
+    {
+        name: 'foo',
+        derivation: '1 === 1 ? 42 : 13'
+    }
+
+The evaluation of this decision will be `42`. The left and right sides of the decision can be made up of static values or they can be made up of other parameters, meaning you can have a decision like this:
+
+    var engine = new mathy.Engine(
+        { name: 'a', derivation: 'b === 1 ? 1 : -1', result: true },
+        { name: 'b', derivation: '1' }
+    );
+
+    var result = engine.process();
+
+    expect(result[0]).to.equal(1);
+
+You can even get really complex and have decisions that the result of them is another parameter:
+
+    var engine = new mathy.Engine(
+        { name: 'a', derivation: 'd ? b : c', result: true },
+        { name: 'b', derivation: '1' },
+        { name: 'c', derivation: '-1' },
+        { name: 'd', derivation: 'c === 1 ? true : false'}
+    );
+
+    var result = engine.process();
+
+    expect(result[0]).to.equal(-1);
+
+# CLI
 
 Mathy also comes with a CLI interface. It can be installed like so:
 
@@ -66,12 +98,10 @@ And used like this:
 
 _Note: Some shells attempt to evaluate expressions so if you want to ensure it's not parsed by your shell make sure it's escaped._
 
-License
----
+# License
 
 MIT
 
-Author
----
+# Author
 
 Aaron Powell
