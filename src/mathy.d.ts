@@ -31,7 +31,9 @@ export module mathy {
         boolean,
         equal,
         notEqual,
+        lessThanEqual,
         lessThan,
+        greaterThanEqual,
         greaterThan,
     }
 }

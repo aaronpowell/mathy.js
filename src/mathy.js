@@ -57,6 +57,7 @@
         var condition = rule.slice(0, index);
         var parts = rule.slice(index + 1).split(':');
         var calc = new Calculation(calculationType.decision);
+        var next = '';
         if(condition.toLowerCase() === 'true') {
             calc.children.push(new Calculation(calculationType.boolean, true));
         } else {
@@ -64,26 +65,40 @@
                 calc.children.push(new Calculation(calculationType.boolean, false));
             } else {
                 var decisionCalc;
-                index = condition.indexOf('===');
+                index = condition.indexOf('==');
                 if(~index) {
                     decisionCalc = new Calculation(calculationType.equal);
                     decisionCalc.children.push(buildCalculation(condition.slice(0, index), rules));
-                    decisionCalc.children.push(buildCalculation(condition.slice(index + 3), rules));
+                    decisionCalc.children.push(buildCalculation(condition.slice(index + 2), rules));
                 } else {
-                    if(~(index = condition.indexOf('!=='))) {
+                    if(~(index = condition.indexOf('!='))) {
                         decisionCalc = new Calculation(calculationType.notEqual);
                         decisionCalc.children.push(buildCalculation(condition.slice(0, index), rules));
-                        decisionCalc.children.push(buildCalculation(condition.slice(index + 3), rules));
+                        decisionCalc.children.push(buildCalculation(condition.slice(index + 2), rules));
                     } else {
                         if(~(index = condition.indexOf('<'))) {
-                            decisionCalc = new Calculation(calculationType.lessThan);
-                            decisionCalc.children.push(buildCalculation(condition.slice(0, index), rules));
-                            decisionCalc.children.push(buildCalculation(condition.slice(index + 1), rules));
-                        } else {
-                            if(~(index = condition.indexOf('>'))) {
-                                decisionCalc = new Calculation(calculationType.greaterThan);
+                            next = condition.slice(index + 1, index + 2);
+                            if(next === '=') {
+                                decisionCalc = new Calculation(calculationType.lessThanEqual);
+                                decisionCalc.children.push(buildCalculation(condition.slice(0, index), rules));
+                                decisionCalc.children.push(buildCalculation(condition.slice(index + 2), rules));
+                            } else {
+                                decisionCalc = new Calculation(calculationType.lessThan);
                                 decisionCalc.children.push(buildCalculation(condition.slice(0, index), rules));
                                 decisionCalc.children.push(buildCalculation(condition.slice(index + 1), rules));
+                            }
+                        } else {
+                            if(~(index = condition.indexOf('>'))) {
+                                next = condition.slice(index + 1, index + 2);
+                                if(next === '=') {
+                                    decisionCalc = new Calculation(calculationType.greaterThanEqual);
+                                    decisionCalc.children.push(buildCalculation(condition.slice(0, index), rules));
+                                    decisionCalc.children.push(buildCalculation(condition.slice(index + 2), rules));
+                                } else {
+                                    decisionCalc = new Calculation(calculationType.greaterThan);
+                                    decisionCalc.children.push(buildCalculation(condition.slice(0, index), rules));
+                                    decisionCalc.children.push(buildCalculation(condition.slice(index + 1), rules));
+                                }
                             } else {
                                 decisionCalc = buildCalculation(condition, rules);
                             }
@@ -252,8 +267,16 @@
                 return node.value = node.children[0].value !== node.children[1].value;
 
             }
+            case calculationType.lessThanEqual: {
+                return node.value = node.children[0].value <= node.children[1].value;
+
+            }
             case calculationType.lessThan: {
                 return node.value = node.children[0].value < node.children[1].value;
+
+            }
+            case calculationType.greaterThanEqual: {
+                return node.value = node.children[0].value >= node.children[1].value;
 
             }
             case calculationType.greaterThan: {
@@ -347,10 +370,14 @@
         calculationType.equal = 10;
         calculationType._map[11] = "notEqual";
         calculationType.notEqual = 11;
-        calculationType._map[12] = "lessThan";
-        calculationType.lessThan = 12;
-        calculationType._map[13] = "greaterThan";
-        calculationType.greaterThan = 13;
+        calculationType._map[12] = "lessThanEqual";
+        calculationType.lessThanEqual = 12;
+        calculationType._map[13] = "lessThan";
+        calculationType.lessThan = 13;
+        calculationType._map[14] = "greaterThanEqual";
+        calculationType.greaterThanEqual = 14;
+        calculationType._map[15] = "greaterThan";
+        calculationType.greaterThan = 15;
     })(mathy.calculationType || (mathy.calculationType = {}));
     var calculationType = mathy.calculationType;
 })(exports.mathy || (exports.mathy = {}));
