@@ -268,7 +268,7 @@ export module mathy {
                 return node.value = Math.pow(node.children[0].value, node.children[1].value);
 
             case calculationType.value:
-                return node.value;
+                return node.value = node.source;
 
             case calculationType.decision:
                 return node.value = (node.children[0].value ? node.children[1].value : node.children[2].value);
@@ -305,7 +305,11 @@ export module mathy {
     }
 
     export class Calculation {
-        constructor(public type?: calculationType, public value: any = 0, public children?: Calculation[] = []) {
+        public children: Calculation[] = [];
+        public source: any = 0;
+        
+        constructor(public type: calculationType, public value: any = 0) {
+            this.source = value;
         }
 
         toString() {

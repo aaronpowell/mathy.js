@@ -248,7 +248,7 @@
 
             }
             case calculationType.value: {
-                return node.value;
+                return node.value = node.source;
 
             }
             case calculationType.decision: {
@@ -287,12 +287,13 @@
         return 0;
     }
     var Calculation = (function () {
-        function Calculation(type, value, children) {
+        function Calculation(type, value) {
             if (typeof value === "undefined") { value = 0; }
-            if (typeof children === "undefined") { children = []; }
             this.type = type;
             this.value = value;
-            this.children = children;
+            this.children = [];
+            this.source = 0;
+            this.source = value;
         }
         Calculation.prototype.toString = function () {
             var str = '';

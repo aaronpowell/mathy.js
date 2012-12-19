@@ -15,7 +15,8 @@ export module mathy {
         public type: calculationType;
         public value: any;
         public children: Calculation[];
-        constructor (type?: calculationType, value?: any, children?: Calculation[]);
+        public source: any;
+        constructor (type: calculationType, value?: any);
         public toString();
     }
     enum calculationType {
