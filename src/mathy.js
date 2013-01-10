@@ -7,7 +7,7 @@
             for (var _i = 0; _i < (arguments.length - 0); _i++) {
                 rules[_i] = arguments[_i + 0];
             }
-            this.version = '0.2.0';
+            this.version = '0.2.1';
             this.getRules = function () {
                 return rules;
             };

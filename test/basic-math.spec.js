@@ -176,4 +176,15 @@ describe('basic arithmatic operations', function () {
             expect(result[0]).to.equal(0.02);
         });
     });
+
+    it('supports float values', function () {
+        var engine = new mathy.Engine({
+            name: 'a',
+            derivation: '3.2 * 10 ^ (-2)'
+        });
+
+        var result = engine.process();
+
+        expect(result[0]).to.equal(0.032);
+    });
 });

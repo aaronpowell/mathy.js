@@ -3,7 +3,7 @@ export module mathy {
     var cleaner = /\s+/gi;
 
     export class Engine {
-        public version = '0.2.0';
+        public version = '0.2.1';
 
         getRules: () => rule[];
         constructor(...rules: rule[]) {
