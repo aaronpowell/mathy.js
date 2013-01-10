@@ -213,7 +213,7 @@
             return buildCalculation(rule, rules);
         }
         rule = rule.trim();
-        return new Calculation(calculationType.value, parseInt(rule, 10) || (rule === 'true' ? true : rule === 'false' ? false : rule));
+        return new Calculation(calculationType.value, parseFloat(rule) || (rule === 'true' ? true : rule === 'false' ? false : rule));
     }
     function calculate(node) {
         if(!node) {
