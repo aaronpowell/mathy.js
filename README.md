@@ -49,7 +49,7 @@ Alternatively you can provide parameters to formulas if you have something more 
 
     expect(result[0]).toEqual(450);
 
-## Parmaters
+## Paramaters
 
 While mathy is designed around mathematical formula parsing it does have a few more advanced features for dealing with _smart_ parameters.
 
