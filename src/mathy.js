@@ -7,7 +7,7 @@
             for (var _i = 0; _i < (arguments.length - 0); _i++) {
                 rules[_i] = arguments[_i + 0];
             }
-            this.version = '0.2.2';
+            this.version = '0.2.3';
             this.getRules = function () {
                 return rules;
             };
@@ -210,7 +210,7 @@
             return buildCalculation(rule, rules);
         }
         rule = rule.trim();
-        return new Calculation(calculationType.value, parseFloat(rule) || (rule === 'true' ? true : rule === 'false' ? false : rule));
+        return new Calculation(calculationType.value, isNaN(parseFloat(rule)) ? (rule === 'true' ? true : rule === 'false' ? false : rule) : parseFloat(rule));
     }
     function calculate(node) {
         if(!node) {

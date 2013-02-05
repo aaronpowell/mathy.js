@@ -187,4 +187,16 @@ describe('basic arithmatic operations', function () {
 
         expect(result[0]).to.equal(0.032);
     });
+    
+    it('should handle zero as an argument', function () {
+		var engine = new mathy.Engine({
+			name: 'a',
+			derivation: '0'
+		});
+
+		var result = engine.process();
+
+		expect(result[0]).to.equal(0);
+		expect(result[0]).to.be.a('number');
+	});
 });

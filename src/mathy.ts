@@ -3,7 +3,7 @@ export module mathy {
     var cleaner = /\s+/gi;
 
     export class Engine {
-        public version = '0.2.2';
+        public version = '0.2.3';
 
         getRules: () => rule[];
         constructor(...rules: rule[]) {
@@ -242,7 +242,7 @@ export module mathy {
         }
 
         rule = rule.trim();
-        return new Calculation(calculationType.value, parseFloat(rule) || (rule === 'true' ? true : rule === 'false' ? <any>false : rule));
+        return new Calculation(calculationType.value, isNaN(parseFloat(rule)) ? (rule === 'true' ? true : rule === 'false' ? <any>false : rule) : parseFloat(rule));
     }
 
     function calculate(node: Calculation) {
