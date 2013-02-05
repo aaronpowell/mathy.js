@@ -17,3 +17,4 @@ npm-debug.log
 *.sublime-workspace
 
 config.js
+.c9revisions
