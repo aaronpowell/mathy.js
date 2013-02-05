@@ -3,7 +3,7 @@ export module mathy {
     var cleaner = /\s+/gi;
 
     export class Engine {
-        public version = '0.2.1';
+        public version = '0.2.2';
 
         getRules: () => rule[];
         constructor(...rules: rule[]) {
@@ -113,6 +113,12 @@ export module mathy {
         var part2: string;
         var calc: Calculation;
 
+        if (typeof rule === 'number') {
+            rule = rule + '';
+        } else if (typeof rule !== 'string') {
+            throw 'The type ' + typeof rule + ' is not supported as a derivation at the present';
+        }
+        
         rule = rule.replace(cleaner, '');
 
         index = rule.lastIndexOf('(');

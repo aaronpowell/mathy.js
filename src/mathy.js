@@ -7,7 +7,7 @@
             for (var _i = 0; _i < (arguments.length - 0); _i++) {
                 rules[_i] = arguments[_i + 0];
             }
-            this.version = '0.2.1';
+            this.version = '0.2.2';
             this.getRules = function () {
                 return rules;
             };
@@ -60,53 +60,45 @@
         var next = '';
         if(condition.toLowerCase() === 'true') {
             calc.children.push(new Calculation(calculationType.boolean, true));
+        } else if(condition.toLowerCase() === 'false') {
+            calc.children.push(new Calculation(calculationType.boolean, false));
         } else {
-            if(condition.toLowerCase() === 'false') {
-                calc.children.push(new Calculation(calculationType.boolean, false));
-            } else {
-                var decisionCalc;
-                index = condition.indexOf('==');
-                if(~index) {
-                    decisionCalc = new Calculation(calculationType.equal);
+            var decisionCalc;
+            index = condition.indexOf('==');
+            if(~index) {
+                decisionCalc = new Calculation(calculationType.equal);
+                decisionCalc.children.push(buildCalculation(condition.slice(0, index), rules));
+                decisionCalc.children.push(buildCalculation(condition.slice(index + 2), rules));
+            } else if(~(index = condition.indexOf('!='))) {
+                decisionCalc = new Calculation(calculationType.notEqual);
+                decisionCalc.children.push(buildCalculation(condition.slice(0, index), rules));
+                decisionCalc.children.push(buildCalculation(condition.slice(index + 2), rules));
+            } else if(~(index = condition.indexOf('<'))) {
+                next = condition.slice(index + 1, index + 2);
+                if(next === '=') {
+                    decisionCalc = new Calculation(calculationType.lessThanEqual);
                     decisionCalc.children.push(buildCalculation(condition.slice(0, index), rules));
                     decisionCalc.children.push(buildCalculation(condition.slice(index + 2), rules));
                 } else {
-                    if(~(index = condition.indexOf('!='))) {
-                        decisionCalc = new Calculation(calculationType.notEqual);
-                        decisionCalc.children.push(buildCalculation(condition.slice(0, index), rules));
-                        decisionCalc.children.push(buildCalculation(condition.slice(index + 2), rules));
-                    } else {
-                        if(~(index = condition.indexOf('<'))) {
-                            next = condition.slice(index + 1, index + 2);
-                            if(next === '=') {
-                                decisionCalc = new Calculation(calculationType.lessThanEqual);
-                                decisionCalc.children.push(buildCalculation(condition.slice(0, index), rules));
-                                decisionCalc.children.push(buildCalculation(condition.slice(index + 2), rules));
-                            } else {
-                                decisionCalc = new Calculation(calculationType.lessThan);
-                                decisionCalc.children.push(buildCalculation(condition.slice(0, index), rules));
-                                decisionCalc.children.push(buildCalculation(condition.slice(index + 1), rules));
-                            }
-                        } else {
-                            if(~(index = condition.indexOf('>'))) {
-                                next = condition.slice(index + 1, index + 2);
-                                if(next === '=') {
-                                    decisionCalc = new Calculation(calculationType.greaterThanEqual);
-                                    decisionCalc.children.push(buildCalculation(condition.slice(0, index), rules));
-                                    decisionCalc.children.push(buildCalculation(condition.slice(index + 2), rules));
-                                } else {
-                                    decisionCalc = new Calculation(calculationType.greaterThan);
-                                    decisionCalc.children.push(buildCalculation(condition.slice(0, index), rules));
-                                    decisionCalc.children.push(buildCalculation(condition.slice(index + 1), rules));
-                                }
-                            } else {
-                                decisionCalc = buildCalculation(condition, rules);
-                            }
-                        }
-                    }
+                    decisionCalc = new Calculation(calculationType.lessThan);
+                    decisionCalc.children.push(buildCalculation(condition.slice(0, index), rules));
+                    decisionCalc.children.push(buildCalculation(condition.slice(index + 1), rules));
                 }
-                calc.children.push(decisionCalc);
+            } else if(~(index = condition.indexOf('>'))) {
+                next = condition.slice(index + 1, index + 2);
+                if(next === '=') {
+                    decisionCalc = new Calculation(calculationType.greaterThanEqual);
+                    decisionCalc.children.push(buildCalculation(condition.slice(0, index), rules));
+                    decisionCalc.children.push(buildCalculation(condition.slice(index + 2), rules));
+                } else {
+                    decisionCalc = new Calculation(calculationType.greaterThan);
+                    decisionCalc.children.push(buildCalculation(condition.slice(0, index), rules));
+                    decisionCalc.children.push(buildCalculation(condition.slice(index + 1), rules));
+                }
+            } else {
+                decisionCalc = buildCalculation(condition, rules);
             }
+            calc.children.push(decisionCalc);
         }
         if(parts.length) {
             calc.children.push(buildCalculation(parts[0], rules));
@@ -122,6 +114,11 @@
         var part1;
         var part2;
         var calc;
+        if(typeof rule === 'number') {
+            rule = rule + '';
+        } else if(typeof rule !== 'string') {
+            throw 'The type ' + typeof rule + ' is not supported as a derivation at the present';
+        }
         rule = rule.replace(cleaner, '');
         index = rule.lastIndexOf('(');
         if(~index) {
@@ -223,66 +220,36 @@
             calculate(node.children[i]);
         }
         switch(node.type) {
-            case calculationType.add: {
+            case calculationType.add:
                 return node.value = node.children[0].value + node.children[1].value;
-
-            }
-            case calculationType.subtraction: {
+            case calculationType.subtraction:
                 return node.value = node.children[0].value - node.children[1].value;
-
-            }
-            case calculationType.multiply: {
+            case calculationType.multiply:
                 return node.value = node.children[0].value * node.children[1].value;
-
-            }
-            case calculationType.division: {
+            case calculationType.division:
                 return node.value = node.children[0].value / node.children[1].value;
-
-            }
-            case calculationType.group: {
+            case calculationType.group:
                 return node.value = calculate(node.children[0]);
-
-            }
-            case calculationType.power: {
+            case calculationType.power:
                 return node.value = Math.pow(node.children[0].value, node.children[1].value);
-
-            }
-            case calculationType.value: {
+            case calculationType.value:
                 return node.value = node.source;
-
-            }
-            case calculationType.decision: {
+            case calculationType.decision:
                 return node.value = (node.children[0].value ? node.children[1].value : node.children[2].value);
-
-            }
-            case calculationType.boolean: {
+            case calculationType.boolean:
                 return node.value;
-
-            }
-            case calculationType.equal: {
+            case calculationType.equal:
                 return node.value = node.children[0].value === node.children[1].value;
-
-            }
-            case calculationType.notEqual: {
+            case calculationType.notEqual:
                 return node.value = node.children[0].value !== node.children[1].value;
-
-            }
-            case calculationType.lessThanEqual: {
+            case calculationType.lessThanEqual:
                 return node.value = node.children[0].value <= node.children[1].value;
-
-            }
-            case calculationType.lessThan: {
+            case calculationType.lessThan:
                 return node.value = node.children[0].value < node.children[1].value;
-
-            }
-            case calculationType.greaterThanEqual: {
+            case calculationType.greaterThanEqual:
                 return node.value = node.children[0].value >= node.children[1].value;
-
-            }
-            case calculationType.greaterThan: {
+            case calculationType.greaterThan:
                 return node.value = node.children[0].value > node.children[1].value;
-
-            }
         }
         return 0;
     }
@@ -301,41 +268,27 @@
                 str += this.children[0].toString();
             }
             switch(this.type) {
-                case calculationType.add: {
+                case calculationType.add:
                     str += ' + ';
                     break;
-
-                }
-                case calculationType.subtraction: {
+                case calculationType.subtraction:
                     str += ' -';
                     break;
-
-                }
-                case calculationType.multiply: {
+                case calculationType.multiply:
                     str += ' * ';
                     break;
-
-                }
-                case calculationType.division: {
+                case calculationType.division:
                     str += ' / ';
                     break;
-
-                }
-                case calculationType.group: {
+                case calculationType.group:
                     str += '(';
                     break;
-
-                }
-                case calculationType.power: {
+                case calculationType.power:
                     str += '^';
                     break;
-
-                }
-                case calculationType.value: {
+                case calculationType.value:
                     str += this.value;
                     break;
-
-                }
             }
             if(this.children[1]) {
                 str += this.children[1].toString();

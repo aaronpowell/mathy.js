@@ -2,7 +2,7 @@ export module mathy {
     class Engine {
         public version: string;
         public getRules: () => rule[];
-        constructor (...rules: rule[]);
+        constructor(...rules: rule[]);
         public add(...newRules: rule[]): void;
         public process(): {};
     }
@@ -16,7 +16,7 @@ export module mathy {
         public value: any;
         public children: Calculation[];
         public source: any;
-        constructor (type: calculationType, value?: any);
+        constructor(type: calculationType, value?: any);
         public toString();
     }
     enum calculationType {
