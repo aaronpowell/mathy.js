@@ -307,7 +307,7 @@ export module mathy {
     export interface rule {
         name: string;
         derivation: string;
-        result: Boolean;
+        result: boolean;
     }
 
     export class Calculation {

@@ -10,7 +10,7 @@ MIN=$(BASE)src/mathy.min.js
 TESTS=$(BASE)test
 build:
 	@echo "Compiling mathy from TypeScript source"
-	node $(TSC) --declaration --sourcemap --target ES5 $(SRC)
+	node $(TSC) --declaration --sourcemap --target ES5 $(SRC) -m commonjs
 	node $(UGLIFYJS) $(OUT) -o $(MIN) --source-map $(MIN).map -p 5 -c -m
 
 build-w:

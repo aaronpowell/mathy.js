@@ -14,7 +14,7 @@
     "url": "https://github.com/aaronpowell/mathy.js"
   },
   "devDependencies": {
-    "typescript": "~0.8.1",
+    "typescript": "~0.9",
     "mocha": "*",
     "chai": "*",
     "uglify-js": "~2.2.1"

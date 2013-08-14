@@ -1,4 +1,4 @@
-export module mathy {
+export declare module mathy {
     class Engine {
         public version: string;
         public getRules: () => rule[];
@@ -9,7 +9,7 @@ export module mathy {
     interface rule {
         name: string;
         derivation: string;
-        result: Boolean;
+        result: boolean;
     }
     class Calculation {
         public type: calculationType;
@@ -17,7 +17,7 @@ export module mathy {
         public children: Calculation[];
         public source: any;
         constructor(type: calculationType, value?: any);
-        public toString();
+        public toString(): string;
     }
     enum calculationType {
         add,
