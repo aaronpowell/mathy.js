@@ -143,7 +143,7 @@
 
             calc = new Calculation(calculationType.group);
             var group = ++groupCount;
-            calc.children.push(buildCalculation(part1 + '$' + group + part3, rules));
+            calc.children.push(buildCalculation(part1 + '`' + group + part3, rules));
             resolveParentesis(calc.children[0], group, part2, rules);
             return calc;
         }
@@ -242,7 +242,7 @@
             return calc;
         }
 
-        if (rule[0] === '$') {
+        if (rule[0] === '`') {
             return new Calculation(calculationType.placeholder, parseInt(rule.slice(1), 10));
         }
 

@@ -76,4 +76,16 @@ describe('mathy API', function() {
             expect(result.a.children[1].value).to.equal(2);
         });
     });
+
+    describe('parameters', function () {
+        it('should allow numbers to be in a parameter', function () {
+            var engine = new mathy.Engine({ name: '__out', derivation: '1 + $0', result: true });
+
+            engine.add({ name: '$0', derivation: '1' });
+
+            var result = engine.process();
+
+            expect(result.__out.value).to.equal(2);
+        });
+    });
 });
