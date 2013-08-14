@@ -19,8 +19,8 @@ export module mathy {
             var rules = this.getRules();
             var results = rules.length === 1 ? rules : rules.filter((r) => r.result, []);
             var node: Calculation;
-            var outputs = { };
-            for(var i = 0; i < results.length; i += 1) {
+            var outputs = {};
+            for (var i = 0; i < results.length; i += 1) {
                 node = buildCalculation(results[i].derivation, rules);
                 outputs[i] = calculate(node);
                 outputs[results[i].name] = node;
@@ -118,7 +118,7 @@ export module mathy {
         } else if (typeof rule !== 'string') {
             throw 'The type ' + typeof rule + ' is not supported as a derivation at the present';
         }
-        
+
         rule = rule.replace(cleaner, '');
 
         index = rule.lastIndexOf('(');
@@ -313,7 +313,7 @@ export module mathy {
     export class Calculation {
         public children: Calculation[] = [];
         public source: any = 0;
-        
+
         constructor(public type: calculationType, public value: any = 0) {
             this.source = value;
         }
