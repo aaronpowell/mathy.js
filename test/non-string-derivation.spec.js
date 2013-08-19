@@ -14,9 +14,28 @@ describe('non-string derivations', function () {
                 derivation: 1
             });
 
-        var result = engine.process();
+            var result = engine.process();
 
-        expect(result[0]).to.equal(1); 
+            expect(result[0]).to.equal(1); 
         });
-    })
+    });
+
+    describe('derivation as function', function () {
+        it('should allow a function as a derivation', function () {
+            var engine = new mathy.Engine({
+                name: 'a',
+                derivation: 'b()',
+                result: true
+            }, {
+                name: 'b',
+                derivation: function () {
+                    return 1;
+                }
+            });
+
+            var result = engine.process();
+ 
+            expect(result[0]).to.equal(1);
+        });
+    });
 });
